@@ -6,7 +6,7 @@ import { OurClients } from "@/components/pages/home/OurClients";
 import { AcademicAlliances } from "@/components/pages/home/AcademicAlliances";
 import { Community } from "@/components/pages/home/Community";
 import { ContactHomeTab } from "@/components/pages/home/ContactHomeTab";
-import { PopUp } from "@/components/ui/PopUp";
+//import { PopUp } from "@/components/ui/PopUp";
   
 export default function Home() {
   return (
@@ -35,7 +35,7 @@ export default function Home() {
         <Community />
         <ContactHomeTab />
       </main>
-        <PopUp />
+       {/* <PopUp /> */}
     </>
   );
 }
