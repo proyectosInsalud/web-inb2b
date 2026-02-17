@@ -78,6 +78,7 @@ export const GridServices = () => {
       {/* Columna derecha */}
       <div className="space-y-6">
         {/* Health Hunting */}
+        {/*
         <article  data-aos="fade-up" data-aos-duration="1000"  className="bg-in-blue-dark p-6 rounded-2xl flex items-center relative">
           <div className="flex-1">
             <div className="flex justify-between items-start  ">
@@ -109,7 +110,7 @@ export const GridServices = () => {
             />
           </div>
         </article>
-
+        */}
         {/* Gestión de Operaciones */}
         <article  data-aos="fade-up" data-aos-duration="1000"  className="bg-in-blue-dark pt-6  px-6 rounded-2xl relative">
           <div className="flex justify-between items-start ">

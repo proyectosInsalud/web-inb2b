@@ -13,9 +13,11 @@ export const Footer = () => {
                         <Link href="#servicios">
                             Asesoría Integral
                         </Link>
+                        {/*
                         <Link href="#servicios">
                             Health Hunting
                         </Link>
+                        */}
                         <Link href="#servicios">
                             Gestión de Operaciones
                         </Link>

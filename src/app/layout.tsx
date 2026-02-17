@@ -35,6 +35,10 @@ export const metadata: Metadata = {
   },
   description: "Somos una agencia consultora especializada en el desarrollo integral de proyectos en el sector salud. Ofrecemos soluciones digitales y asesoría integrales.",
   keywords: [
+    "INB2B",
+    "INB2B Health Partners",
+    "agencia INB2B",
+    "consultora INB2B",
     "salud digital",
     "consultoría salud",
     "transformación digital salud",
@@ -49,7 +53,9 @@ export const metadata: Metadata = {
     "digitalización salud",
     "formación salud",
     "diplomados salud",
-    "acompañamiento clínico"
+    "acompañamiento clínico",
+    "inb2b salud digital",
+    "inb2b health business club"
   ],
   authors: [{ name: "INB2B Health Partners" }],
   // creator: "INB2B Health Partners",
@@ -62,6 +68,31 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://inb2b.com"),
   alternates: {
     canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "es_ES",
+    url: "https://inb2b.com",
+    siteName: "INB2B Health Partners",
+    title: "INB2B - Transformamos ideas en negocios de salud rentables en LATAM",
+    description:
+      "Somos una agencia consultora especializada en el desarrollo integral de proyectos en el sector salud. Ofrecemos soluciones digitales, asesoría integral y formación para hacer crecer tu proyecto en salud en Latinoamérica.",
+    images: [
+      {
+        url: "/images/hero/hero-photo.png",
+        width: 1200,
+        height: 630,
+        alt: "INB2B Health Partners - Soluciones digitales para el sector salud",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "INB2B - Transformamos ideas en negocios de salud rentables en LATAM",
+    description:
+      "Somos una agencia consultora especializada en el desarrollo integral de proyectos en el sector salud. Ofrecemos soluciones digitales, asesoría integral y formación para hacer crecer tu proyecto en salud en Latinoamérica.",
+    images: ["/images/hero/hero-photo.png"],
+    creator: "@inb2b_health",
   },
   // openGraph: {
   //   type: "website",
@@ -129,6 +160,43 @@ export default function RootLayout({
           message="¡Hola! Vi su web y me gustaría obtener más información sobre INB2B"
         />
         <Footer />
+
+        <Script
+          id="ld-json-org"
+          type="application/ld+json"
+          strategy="beforeInteractive"
+        >
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "Organization",
+                name: "INB2B Health Partners",
+                url: "https://inb2b.com",
+                logo: "https://inb2b.com/favicon.svg",
+                contactPoint: [
+                  {
+                    "@type": "ContactPoint",
+                    telephone: "+51 943 583 887",
+                    contactType: "customer service",
+                    areaServed: "LATAM",
+                    availableLanguage: ["es"],
+                  },
+                ],
+              },
+              {
+                "@type": "WebSite",
+                name: "INB2B Health Partners",
+                url: "https://inb2b.com",
+                potentialAction: {
+                  "@type": "SearchAction",
+                  target: "https://www.google.com/search?q=inb2b+{search_term_string}",
+                  "query-input": "required name=search_term_string",
+                },
+              },
+            ],
+          })}
+        </Script>
 
         <Script id="google-analytics" strategy="afterInteractive">
           {

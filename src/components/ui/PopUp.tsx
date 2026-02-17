@@ -30,7 +30,7 @@ export const PopUp = () => {
           alt="Programa salud digital y gestion de la innovacion clinica"
           width={400}
           height={500}
-          quality={95}
+          quality={75}
           className="w-full absolute top-1/2 -translate-y-1/2"
         />
       </Link>
