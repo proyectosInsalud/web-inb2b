@@ -58,7 +58,7 @@ public/
 - Usa alias `@/` para evitar rutas relativas largas.
 
 ## Detalles clave a replicar
-- `src/app/layout.tsx`: carga fuentes Geist/Geist_Mono/Poppins/Lato, incluye `<WhatsAppButton />`, `<Footer />`, script GTM y `<noscript>` iframe; define `metadata` con `metadataBase: https://inb2b.com`.
+- `src/app/layout.tsx`: carga fuentes Geist/Geist_Mono/Poppins/Lato, incluye `<WhatsAppButton />`, `<Footer />`, script GTM y `<noscript>` iframe; define `metadata` con `metadataBase: https://inb2blatam.com`.
 - `src/app/page.tsx`: compone las secciones de `features/home` y `PopUp`.
 - `src/app/globals.css`: importa `tailwindcss` y `tw-animate-css`, define tokens de color/tipografía y `@layer base` para bordes/ring; `scroll-behavior: smooth`.
 - Formularios: `react-hook-form` + `@hookform/resolvers` + `zod` con esquemas en `src/schemas`.

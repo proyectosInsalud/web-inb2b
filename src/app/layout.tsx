@@ -65,14 +65,14 @@ export const metadata: Metadata = {
   //   address: false,
   //   telephone: false,
   // },
-  metadataBase: new URL("https://inb2b.com"),
+  metadataBase: new URL("https://inb2blatam.com"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
     type: "website",
     locale: "es_ES",
-    url: "https://inb2b.com",
+    url: "https://inb2blatam.com",
     siteName: "INB2B Health Partners",
     title: "INB2B - Transformamos ideas en negocios de salud rentables en LATAM",
     description:
@@ -97,7 +97,7 @@ export const metadata: Metadata = {
   // openGraph: {
   //   type: "website",
   //   locale: "es_ES",
-  //   url: "https://inb2b.com",
+  //   url: "https://inb2blatam.com",
   //   siteName: "INB2B Health Partners",
   //   title: "INB2B - Transformamos ideas en negocios de salud rentables en LATAM",
   //   description: "Somos una agencia consultora especializada en el desarrollo integral de proyectos en el sector salud. Ofrecemos soluciones digitales, asesoría integral y formación para hacer crecer tu proyecto en salud en Latinoamérica.",
@@ -139,7 +139,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" suppressHydrationWarning>
-
+      <head>
+        <meta name="google-site-verification" content="ctgLc3Eiy8m9x4tSCN0IMhUmxHDL7Rjgwkj20Fw3qrU" />
+      </head>
       {/* <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -172,8 +174,8 @@ export default function RootLayout({
               {
                 "@type": "Organization",
                 name: "INB2B Health Partners",
-                url: "https://inb2b.com",
-                logo: "https://inb2b.com/favicon.svg",
+                url: "https://inb2blatam.com",
+                logo: "https://inb2blatam.com/favicon.svg",
                 contactPoint: [
                   {
                     "@type": "ContactPoint",
@@ -187,7 +189,7 @@ export default function RootLayout({
               {
                 "@type": "WebSite",
                 name: "INB2B Health Partners",
-                url: "https://inb2b.com",
+                url: "https://inb2blatam.com",
                 potentialAction: {
                   "@type": "SearchAction",
                   target: "https://www.google.com/search?q=inb2b+{search_term_string}",
