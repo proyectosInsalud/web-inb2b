@@ -26,7 +26,7 @@ export const PopUp = () => {
         target="_blank"
       >
         <Image
-          src="/images/popup/popup-inb2b.png"
+          src="/images/popup/popup-inb2b_v2.png"
           alt="Programa salud digital y gestion de la innovacion clinica"
           width={400}
           height={500}
