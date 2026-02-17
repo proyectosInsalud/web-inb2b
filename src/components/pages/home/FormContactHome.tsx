@@ -12,7 +12,8 @@ import { formContactHomeSchema } from "@/schemas";
 import { FormContactHomeType } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+// import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
 const WHATSAPP_NUMBER = "51943583887"; // Reemplaza con tu número de WhatsApp
@@ -26,7 +27,6 @@ export const FormContactHome = () => {
       mensaje: "",
       empresa: "",
       telefono: "",
-      aceptaTerminos: "",
     },
   });
 
@@ -39,9 +39,11 @@ export const FormContactHome = () => {
       });
     }
 
-    const message = `¡Hola! Mi nombre es ${data.nombre} ${data.apellido}.%0A%0A${
-      data.empresa ? `Represento a la empresa: ${data.empresa}%0A` : ""
-    }Teléfono de contacto: ${data.telefono}%0A%0AMensaje: ${data.mensaje}`;
+    const message = encodeURIComponent(
+      `¡Hola! Mi nombre es ${data.nombre} ${data.apellido}.\n\n${
+        data.empresa ? `Represento a la empresa: ${data.empresa}\n` : ""
+      }Teléfono de contacto: ${data.telefono}\n\nMensaje: ${data.mensaje}`
+    );
 
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
     window.open(whatsappUrl, "_blank");
@@ -160,28 +162,23 @@ export const FormContactHome = () => {
             control={form.control}
             name="aceptaTerminos"
             render={({ field }) => (
-              <FormItem className="space-y-1">
-                <FormControl>
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    className="flex items-center space-x-2"
-                  >
-                    <FormItem className="flex items-center space-x-0 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem
-                          value="aceptado"
-                          className="border-white text-white"
-                        />
-                      </FormControl>
-                      <Label className="font-normal text-xs text-white">
+            <FormItem className="space-y-1">
+                  <div className="flex items-start gap-2">
+                    <FormControl>
+                      <Checkbox
+                        checked={!!field.value}
+                        onCheckedChange={(v: boolean) => field.onChange(v === true)}
+                        className="border-white data-[state=checked]:bg-white data-[state=checked]:text-black"
+                      />
+                    </FormControl>
+
+                    <Label className="font-normal text-xs text-white leading-4">
                       Autorizo el tratamiento de mis datos personales con fines informativos y comerciales
-                      </Label>
-                    </FormItem>
-                  </RadioGroup>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                    </Label>
+                  </div>
+
+                  <FormMessage />
+                </FormItem>
             )}
           />
           <Button
