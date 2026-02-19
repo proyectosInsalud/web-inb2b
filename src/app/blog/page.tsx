@@ -21,14 +21,17 @@ export const revalidate = 300;
 
 const getPosts = unstable_cache(
   (start: number, end: number, search: string, category: string, tag: string) =>
-    sanityClient.fetch<BlogPost[]>(POSTS_PAGINATED, { start, end, search, category, tag }),
+    sanityClient.fetch<BlogPost[]>(
+      POSTS_PAGINATED,
+      { start, end, search, category, tag } as Record<string, unknown>
+    ),
   ["posts-paginated"],
   { revalidate: 300 }
 );
 
 const getTotalPosts = unstable_cache(
   (search: string, category: string, tag: string) =>
-    sanityClient.fetch<number>(TOTAL_POSTS, { search, category, tag }),
+    sanityClient.fetch<number>(TOTAL_POSTS, { search, category, tag } as Record<string, unknown>),
   ["posts-total"],
   { revalidate: 300 }
 );
