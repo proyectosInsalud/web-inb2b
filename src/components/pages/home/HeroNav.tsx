@@ -17,7 +17,7 @@ export const HeroNav = () => {
             >
               <span>Blog</span>
               <span className="px-2 py-[2px] text-[10px] uppercase tracking-[0.08em] rounded-full border border-in-cyan/40 bg-in-cyan/15 text-in-cyan shadow-[0_0_0_1px_rgba(93,197,190,0.25)] animate-pulse group-hover:animate-none group-hover:bg-in-cyan/25">
-                !Nuevo¡
+                ¡Nuevo!
               </span>
             </Link>
           </div>
