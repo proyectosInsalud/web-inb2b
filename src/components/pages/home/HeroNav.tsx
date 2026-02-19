@@ -11,7 +11,15 @@ export const HeroNav = () => {
           <div className="hidden md:flex flex-col md:order-2  lg:order-1 md:flex-row gap-6 text-end">
             <Link href="/#nosotros">Nosotros</Link>
             <Link href="/#servicios">Servicios</Link>
-            <Link href="/blog">Blog</Link>
+            <Link
+              href="/blog"
+              className="inline-flex items-center gap-2 group"
+            >
+              <span>Blog</span>
+              <span className="px-2 py-[2px] text-[10px] uppercase tracking-[0.08em] rounded-full border border-in-cyan/40 bg-in-cyan/15 text-in-cyan shadow-[0_0_0_1px_rgba(93,197,190,0.25)] animate-pulse group-hover:animate-none group-hover:bg-in-cyan/25">
+                !Nuevo¡
+              </span>
+            </Link>
           </div>
           <Image
             className="mx-auto left-0 md:mr-auto w-32 md:w-24 lg:w-auto lg:mx-auto md:order-1 lg:absolute lg:left-1/2 lg:-translate-x-1/2 md:relative"
