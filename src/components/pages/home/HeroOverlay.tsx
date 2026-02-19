@@ -31,9 +31,9 @@ export const HeroOverlay = () => {
         <div className="max-w-7xl mx-auto px-4 pt-12 pb-14 md:py-24 container space-y-6 text-white md:translate-y-1/2 md:top-1/2">
           <div data-aos="fade-up" className="absolute md:relative bottom-12 space-y-4">
             <h1 className="text-3xl text-center md:text-left md:text-5xl lg:text-6xl w-full lg:w-1/2 max-w-2xl font-in-avantgarde md:px-0 pr-4 leading-8 md:leading-none">INB2B transforma ideas 
-            en negocios de salud rentables en LATAM</h1>
+            en proyectos de salud rentables en LATAM</h1>
             <div className="font-in-poppins flex-col md:flex-row flex items-center md:items-start gap-4">
-              <p className="md:text-lg md:py-0 text-center">¿Tienes un proyecto en salud?</p>
+              <h2 className="md:text-lg md:py-0 text-center">¿Tienes un proyecto en salud?</h2>
               <Link
                 className="cta-wsp-custom bg-in-cyan px-6 py-2 text-black rounded-full"
                 href="https://wa.me/51943583887?text=%C2%A1Hola!%20Vi%20su%20web%20y%20me%20gustar%C3%ADa%20obtener%20m%C3%A1s%20informaci%C3%B3n%C2%A0sobre%C2%A0INB2B"

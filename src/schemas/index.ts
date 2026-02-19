@@ -10,3 +10,6 @@ export const formContactHomeSchema = z.object({
     message: "Debes aceptar los términos",
   })
 });
+
+export { blogPostSchema, blogListSchema } from "./blog";
+export { blogEntradaSchema } from "./blogEntrada";

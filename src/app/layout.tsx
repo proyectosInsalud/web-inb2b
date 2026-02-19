@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Poppins, Lato } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/common/Footer";
 import { WhatsAppButton } from "@/components/common/WhatsAppButton";
+import { AOSInit } from "@/components/common/AOSInit";
 import "aos/dist/aos.css";
 import Script from "next/script";
 
@@ -156,6 +157,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} ${lato.variable} antialiased`}
         suppressHydrationWarning
       >
+        <AOSInit />
         {children}
         <WhatsAppButton 
           phoneNumber="51943583887"

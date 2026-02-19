@@ -1,11 +1,4 @@
-"use client";
-import { useEffect } from "react";
-import AOS from "aos";
-
 export const AboutSection = () => {
-  useEffect(() => {
-    AOS.init();
-  }, []);
   return (
     <div id="nosotros"  className="bg-in-blue-main text-white py-12 md:py-24">
         <section className="max-w-7xl mx-auto px-4 container space-y-16">
