@@ -14,9 +14,22 @@ export const HeroNav = () => {
       <div className="container md:backdrop-blur-[35px] md:bg-[linear-gradient(181deg,rgba(255,255,255,0.50)_1.15%,rgba(255,255,255,0.00)_98.91%)] max-w-7xl md:fixed md:left-1/2 md:-translate-x-1/2 md:top-6 md:z-30 mx-auto md:px-10 rounded-[30px] md:py-4 lg:py-0">
         <nav className="relative z-40 flex items-center justify-between py-4 lg:py-6 text-gray-100 font-in-poppins md:grid md:grid-cols-3 md:items-center">
           <div className="hidden md:flex md:justify-start md:items-center gap-4 md:gap-6 text-end text-sm md:text-base whitespace-nowrap">
-            <Link href="/#nosotros">Nosotros</Link>
-            <Link href="/#servicios">Servicios</Link>
-            <Link href="/blog" className="inline-flex items-center gap-2 group">
+            <Link
+              href="/#nosotros"
+              className="transition hover:text-in-cyan focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-in-cyan"
+            >
+              Nosotros
+            </Link>
+            <Link
+              href="/#servicios"
+              className="transition hover:text-in-cyan focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-in-cyan"
+            >
+              Servicios
+            </Link>
+            <Link
+              href="/blog"
+              className="inline-flex items-center gap-2 group transition hover:text-in-cyan focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-in-cyan"
+            >
               <span>Blog</span>
               <span className="px-2 py-[2px] text-[10px] uppercase tracking-[0.08em] rounded-full border border-in-cyan/40 bg-in-cyan/15 text-in-cyan shadow-[0_0_0_1px_rgba(93,197,190,0.25)] animate-pulse group-hover:animate-none group-hover:bg-in-cyan/25">
                 Nuevo!
@@ -39,12 +52,20 @@ export const HeroNav = () => {
           </Link>
 
           <div className="hidden md:flex md:justify-end md:items-center gap-4 md:gap-6 whitespace-nowrap">
-            <Link href="/#inacademy">InAcademy</Link>
-            <Link href="/#health-business-club" className="hidden xl:block">
+            <Link
+              href="/#inacademy"
+              className="transition hover:text-in-cyan focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-in-cyan"
+            >
+              InAcademy
+            </Link>
+            <Link
+              href="/#health-business-club"
+              className="hidden xl:block transition hover:text-in-cyan focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-in-cyan"
+            >
               Health Business Club
             </Link>
             <Link
-              className="cta-wsp-custom bg-in-cyan text-black px-6 md:px-7 lg:px-8 py-2 rounded-full text-sm md:text-base transition-all duration-300 hover:bg-in-cyan/80"
+              className="cta-wsp-custom bg-in-cyan text-black px-6 md:px-7 lg:px-8 py-2 rounded-full text-sm md:text-base transition-all duration-300 hover:bg-in-cyan/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-in-cyan"
               href="https://wa.me/51943583887?text=Hola%20Vi%20su%20web%20y%20me%20gustaria%20obtener%20mas%20informacion%20sobre%20INB2B"
               target="_blank"
               rel="noopener noreferrer"
@@ -89,27 +110,47 @@ export const HeroNav = () => {
           {isOpen && (
             <div className="md:hidden absolute left-0 right-0 top-full mt-3 rounded-2xl border border-white/10 bg-black/80 px-5 py-4 text-sm shadow-2xl backdrop-blur-xl">
               <div className="flex flex-col gap-3">
-                <Link href="/#nosotros" onClick={closeMenu}>
+                <Link
+                  href="/#nosotros"
+                  onClick={closeMenu}
+                  className="rounded-lg px-2 py-1 -mx-2 transition hover:bg-white/10 active:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-in-cyan"
+                >
                   Nosotros
                 </Link>
-                <Link href="/#servicios" onClick={closeMenu}>
+                <Link
+                  href="/#servicios"
+                  onClick={closeMenu}
+                  className="rounded-lg px-2 py-1 -mx-2 transition hover:bg-white/10 active:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-in-cyan"
+                >
                   Servicios
                 </Link>
-                <Link href="/blog" className="inline-flex items-center gap-2" onClick={closeMenu}>
+                <Link
+                  href="/blog"
+                  className="inline-flex items-center gap-2 rounded-lg px-2 py-1 -mx-2 transition hover:bg-white/10 active:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-in-cyan"
+                  onClick={closeMenu}
+                >
                   <span>Blog</span>
                   <span className="px-2 py-[2px] text-[10px] uppercase tracking-[0.08em] rounded-full border border-in-cyan/40 bg-in-cyan/15 text-in-cyan shadow-[0_0_0_1px_rgba(93,197,190,0.25)] animate-pulse">
                     Nuevo!
                   </span>
                 </Link>
-                <Link href="/#inacademy" onClick={closeMenu}>
+                <Link
+                  href="/#inacademy"
+                  onClick={closeMenu}
+                  className="rounded-lg px-2 py-1 -mx-2 transition hover:bg-white/10 active:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-in-cyan"
+                >
                   InAcademy
                 </Link>
-                <Link href="/#health-business-club" onClick={closeMenu}>
+                <Link
+                  href="/#health-business-club"
+                  onClick={closeMenu}
+                  className="rounded-lg px-2 py-1 -mx-2 transition hover:bg-white/10 active:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-in-cyan"
+                >
                   Health Business Club
                 </Link>
               </div>
               <Link
-                className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-in-cyan px-6 py-2 text-center text-black transition hover:bg-in-cyan/80"
+                className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-in-cyan px-6 py-2 text-center text-black transition hover:bg-in-cyan/80 active:bg-in-cyan/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/60"
                 href="https://wa.me/51943583887?text=Hola%20Vi%20su%20web%20y%20me%20gustaria%20obtener%20mas%20informacion%20sobre%20INB2B"
                 target="_blank"
                 rel="noopener noreferrer"
