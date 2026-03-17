@@ -39,6 +39,9 @@ export async function generateMetadata({
 
   if (!post) return { title: "Post no encontrado" };
 
+
+  if (!post) return { title: "Post no encontrado" };
+
   const title = post.seo?.metaTitle || post.title;
   const description = post.seo?.metaDescription || post.excerpt || "";
   const imageUrl = post.cover?.asset
@@ -48,6 +51,9 @@ export async function generateMetadata({
   return {
     title,
     description,
+    alternates: {
+      canonical: `/blog/${slug}`,
+    },
     openGraph: {
       title,
       description,

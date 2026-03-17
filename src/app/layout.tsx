@@ -142,6 +142,7 @@ export default function RootLayout({
     <html lang="es" suppressHydrationWarning>
       <head>
         <meta name="google-site-verification" content="ctgLc3Eiy8m9x4tSCN0IMhUmxHDL7Rjgwkj20Fw3qrU" />
+        <meta name="google-site-verification" content="AFtbZpGNCpMso0C09YCvQzH6ueKliF-LcQ0AtG9VRuc" />
       </head>
       {/* <head>
         <link rel="icon" href="/favicon.ico" />
