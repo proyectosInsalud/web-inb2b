@@ -11,6 +11,7 @@ export const sanityClient = createClient({
   dataset,
   apiVersion,
   useCdn: true, // Siempre usar CDN para máximo rendimiento en el blog
+  token, // Restaurar el token para asegurar acceso a datasets privados
 });
 
 // Cliente con token para revalidación y previsualización (No usar con CDN)
