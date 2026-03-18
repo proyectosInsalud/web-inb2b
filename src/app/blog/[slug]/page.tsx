@@ -46,7 +46,9 @@ export async function generateMetadata({
     : undefined;
 
   return {
-    title,
+    title: {
+      absolute: title,
+    },
     description,
     alternates: {
       canonical: `/blog/${slug}`,

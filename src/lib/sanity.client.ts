@@ -10,16 +10,15 @@ export const sanityClient = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: token ? false : true, // Usar CDN solo si no hay token (por seguridad)
-  token, // Restaurar el token para asegurar acceso a datasets privados
+  useCdn: true, // CDN activado para lectura pública ultrarrápida
 });
 
-// Cliente con token para revalidación y previsualización (No usar con CDN)
+// Cliente con token para revalidación, previsualización y operaciones administrativas
 export const sanityAdminClient = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: false,
+  useCdn: false, // No usar CDN con el token para evitar inconsistencias
   token,
 });
 

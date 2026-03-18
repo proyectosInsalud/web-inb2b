@@ -48,7 +48,9 @@ export async function generateMetadata({
   const shouldIndex = isRoot && !hasFilters;
 
   return {
-    title: "Blog de Salud Digital y Gestión Clínica en LATAM | INB2B",
+    title: {
+      absolute: "Blog de Salud Digital y Gestión Clínica en LATAM | INB2B",
+    },
     description:
       "Centro de Salud Digital y Gestión Clínica en LATAM. Guías prácticas de expertos para escalar tu negocio de salud. ¡Entra ahora y optimiza tu gestión clínica! →",
     alternates: {
