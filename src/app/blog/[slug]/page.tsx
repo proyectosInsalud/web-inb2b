@@ -14,20 +14,27 @@ interface SlugPageProps {
   params: Promise<{ slug: string }>;
 }
 
-const getPostBySlug = unstable_cache(
-  (slug: string) => sanityClient.fetch<BlogPostDetail | null>(POST_BY_SLUG, { slug }),
-  ["post-by-slug-v3"],
-  { revalidate: 300 }
-);
+const truncateTitle = (text: string, limit = 60) => {
+  if (!text) return "";
+  return text.length > limit ? text.substring(0, limit - 3) + "..." : text;
+};
 
-const getAllSlugs = unstable_cache(
-  () =>
-    sanityClient.fetch<string[]>(
-      '*[_type == "post" && defined(slug.current)][].slug.current'
-    ),
-  ["post-slugs"],
-  { revalidate: 300 }
-);
+async function getPostBySlug(slug: string) {
+  return sanityClient.fetch<BlogPostDetail | null>(POST_BY_SLUG, { slug }, {
+    next: { 
+      revalidate: 3600,
+      tags: [`post-${slug}`]
+    }
+  });
+}
+
+async function getAllSlugs() {
+  return sanityClient.fetch<string[]>(
+    '*[_type == "post" && defined(slug.current)][].slug.current',
+    {},
+    { next: { revalidate: 3600 } }
+  );
+}
 
 export const revalidate = 3600;
 
@@ -40,7 +47,7 @@ export async function generateMetadata({
   if (!post) return { title: "Post no encontrado" };
 
   const rawTitle = post.seo?.metaTitle || post.title;
-  const title = rawTitle.length > 60 ? rawTitle.substring(0, 57) + "..." : rawTitle;
+  const title = truncateTitle(rawTitle);
   const description = post.seo?.metaDescription || post.excerpt || "";
   const imageUrl = post.cover?.asset
     ? urlFor(post.cover.asset).width(1200).height(630).url()

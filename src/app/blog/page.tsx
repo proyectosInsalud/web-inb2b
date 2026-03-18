@@ -23,18 +23,25 @@ interface BlogData {
   banner: BlogBanner | null;
 }
 
-const getBlogData = unstable_cache(
-  (start: number, end: number, search: string, category: string, tag: string) =>
-    sanityClient.fetch<BlogData>(BLOG_PAGE_DATA, {
-      start,
-      end,
-      search,
-      category,
-      tag,
-    } as Record<string, unknown>),
-  ["blog-page-v3"], // Prefix version to bust existing cache
-  { revalidate: 3600 }
-);
+const truncateTitle = (text: string, limit = 60) => {
+  if (!text) return "";
+  return text.length > limit ? text.substring(0, limit - 3) + "..." : text;
+};
+
+async function getBlogData(start: number, end: number, search: string, category: string, tag: string) {
+  return sanityClient.fetch<BlogData>(BLOG_PAGE_DATA, {
+    start,
+    end,
+    search,
+    category,
+    tag,
+  } as Record<string, unknown>, {
+    next: { 
+      revalidate: 3600,
+      tags: ["blog-list"] 
+    }
+  });
+}
 // Note: Arguments are automatically used by Next.js if they are serializable, 
 // but we add a version suffix to the tags/keys if needed.
 
@@ -47,9 +54,11 @@ export async function generateMetadata({
   // Aseguramos que solo se indexe la raíz sin filtros para evitar duplicidad
   const shouldIndex = isRoot && !hasFilters;
 
+  const metaTitle = truncateTitle("Blog de Salud Digital y Gestión Clínica en LATAM | INB2B");
+  
   return {
     title: {
-      absolute: "Blog de Salud Digital y Gestión Clínica en LATAM | INB2B",
+      absolute: metaTitle,
     },
     description:
       "Centro de Salud Digital y Gestión Clínica en LATAM. Guías prácticas de expertos para escalar tu negocio de salud. ¡Entra ahora y optimiza tu gestión clínica! →",
