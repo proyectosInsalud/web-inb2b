@@ -22,13 +22,16 @@ function BlogCard({ post }: { post: BlogPost }) {
               src={urlFor(post.cover.asset)
                 .width(600)
                 .height(375)
-                .quality(75)
+                .quality(70)
                 .auto("format")
                 .url()}
               alt={post.cover.alt || post.title}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-500"
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              {...(post.cover.asset.metadata?.lqip
+                ? { placeholder: "blur", blurDataURL: post.cover.asset.metadata.lqip }
+                : {})}
             />
           ) : (
             <div className="w-full h-full bg-in-blue-dark flex items-center justify-center text-white/20">
@@ -108,13 +111,16 @@ function BannerCard({ banner }: { banner: BlogBanner }) {
           src={urlFor(banner.image.asset)
             .width(600)
             .height(400)
-            .quality(75)
+            .quality(70)
             .auto("format")
             .url()}
           alt={banner.alt || "Banner publicitario"}
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          {...(banner.image.asset.metadata?.lqip
+            ? { placeholder: "blur", blurDataURL: banner.image.asset.metadata.lqip }
+            : {})}
         />
       </div>
     </div>

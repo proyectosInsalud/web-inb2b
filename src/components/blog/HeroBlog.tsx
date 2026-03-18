@@ -122,7 +122,7 @@ export function HeroBlog({ posts }: HeroBlogProps) {
                         src={urlFor(post.cover.asset)
                           .width(900)
                           .height(675)
-                          .quality(80)
+                          .quality(70)
                           .auto("format")
                           .url()}
                         alt={post.cover.alt || post.title}
@@ -130,6 +130,9 @@ export function HeroBlog({ posts }: HeroBlogProps) {
                         className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                         sizes="(max-width: 768px) 100vw, 45vw"
                         priority
+                        {...(post.cover.asset.metadata?.lqip
+                          ? { placeholder: "blur", blurDataURL: post.cover.asset.metadata.lqip }
+                          : {})}
                       />
                     </div>
 

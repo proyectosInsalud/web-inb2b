@@ -12,7 +12,7 @@ export const POSTS_PAGINATED = groq`
     excerpt,
     publishedAt,
     cover {
-      asset,
+      asset-> { _id, url, metadata { lqip } },
       alt
     },
     category-> { title, slug },
@@ -37,7 +37,7 @@ export const LATEST_POSTS = groq`
     excerpt,
     publishedAt,
     cover {
-      asset,
+      asset-> { _id, url, metadata { lqip } },
       alt
     },
     category-> { title, slug },
@@ -54,7 +54,7 @@ export const POST_BY_SLUG = groq`
     excerpt,
     publishedAt,
     cover {
-      asset,
+      asset-> { _id, url, metadata { lqip } },
       alt
     },
     category-> { title, slug },
@@ -107,7 +107,7 @@ export const BLOG_PAGE_DATA = groq`
       excerpt,
       publishedAt,
       cover {
-        asset,
+        asset-> { _id, url, metadata { lqip } },
         alt
       },
       category-> { title, slug },
@@ -126,7 +126,7 @@ export const BLOG_PAGE_DATA = groq`
       excerpt,
       publishedAt,
       cover {
-        asset,
+        asset-> { _id, url, metadata { lqip } },
         alt
       },
       category-> { title, slug },
@@ -144,7 +144,7 @@ export const BLOG_PAGE_DATA = groq`
     "banner": *[_type == "banner"][0] {
       alt,
       image {
-        asset
+        asset-> { _id, url, metadata { lqip } }
       }
     }
   }
