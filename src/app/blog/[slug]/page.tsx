@@ -39,7 +39,8 @@ export async function generateMetadata({
 
   if (!post) return { title: "Post no encontrado" };
 
-  const title = post.seo?.metaTitle || post.title;
+  const rawTitle = post.seo?.metaTitle || post.title;
+  const title = rawTitle.length > 60 ? rawTitle.substring(0, 57) + "..." : rawTitle;
   const description = post.seo?.metaDescription || post.excerpt || "";
   const imageUrl = post.cover?.asset
     ? urlFor(post.cover.asset).width(1200).height(630).url()
