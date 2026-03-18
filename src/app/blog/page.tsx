@@ -32,9 +32,11 @@ const getBlogData = unstable_cache(
       category,
       tag,
     } as Record<string, unknown>),
-  ["blog-page-consolidated"],
+  ["blog-page-v2"], // Prefix version to bust existing cache
   { revalidate: 3600 }
 );
+// Note: Arguments are automatically used by Next.js if they are serializable, 
+// but we add a version suffix to the tags/keys if needed.
 
 export async function generateMetadata({
   searchParams,

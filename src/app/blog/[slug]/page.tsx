@@ -16,7 +16,7 @@ interface SlugPageProps {
 
 const getPostBySlug = unstable_cache(
   (slug: string) => sanityClient.fetch<BlogPostDetail | null>(POST_BY_SLUG, { slug }),
-  ["post-by-slug"],
+  ["post-by-slug-v2"],
   { revalidate: 300 }
 );
 
