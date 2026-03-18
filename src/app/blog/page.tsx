@@ -32,7 +32,7 @@ const getBlogData = unstable_cache(
       category,
       tag,
     } as Record<string, unknown>),
-  ["blog-page-v2"], // Prefix version to bust existing cache
+  ["blog-page-v3"], // Prefix version to bust existing cache
   { revalidate: 3600 }
 );
 // Note: Arguments are automatically used by Next.js if they are serializable, 
