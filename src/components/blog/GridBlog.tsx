@@ -21,7 +21,7 @@ function BlogCard({ post }: { post: BlogPost }) {
             src={urlFor(post.cover.asset)
               .width(600)
               .height(375)
-              .quality(80)
+              .quality(75)
               .auto("format")
               .url()}
             alt={post.cover.alt || post.title}
@@ -100,7 +100,12 @@ function BannerCard({ banner }: { banner: BlogBanner }) {
     <div className="rounded-2xl overflow-hidden border border-white/10 h-full min-h-0">
       <div className="relative h-full w-full">
         <Image
-          src={banner.image.asset.url}
+          src={urlFor(banner.image.asset)
+            .width(600)
+            .height(400)
+            .quality(75)
+            .auto("format")
+            .url()}
           alt={banner.alt}
           fill
           className="object-cover"

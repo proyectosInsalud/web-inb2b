@@ -93,3 +93,59 @@ export const ACTIVE_BANNER = groq`
     }
   }
 `;
+
+export const BLOG_PAGE_DATA = groq`
+  {
+    "posts": *[_type == "post"
+      && ($search == "" || title match ($search + "*") || excerpt match ($search + "*"))
+      && ($category == "" || category->slug.current == $category)
+      && ($tag == "" || $tag in tags[]->slug.current)
+    ] | order(publishedAt desc) [$start...$end] {
+      _id,
+      title,
+      slug,
+      excerpt,
+      publishedAt,
+      cover {
+        asset-> { _id, url, metadata { lqip } },
+        alt
+      },
+      category-> { title, slug },
+      tags[]-> { title, slug },
+      author-> { name, slug, image { asset-> { url } } }
+    },
+    "total": count(*[_type == "post"
+      && ($search == "" || title match ($search + "*") || excerpt match ($search + "*"))
+      && ($category == "" || category->slug.current == $category)
+      && ($tag == "" || $tag in tags[]->slug.current)
+    ]),
+    "latest": *[_type == "post"] | order(publishedAt desc) [0...3] {
+      _id,
+      title,
+      slug,
+      excerpt,
+      publishedAt,
+      cover {
+        asset-> { _id, url, metadata { lqip } },
+        alt
+      },
+      category-> { title, slug },
+      tags[]-> { title, slug },
+      author-> { name, slug, image { asset-> { url } } }
+    },
+    "categories": *[_type == "category"] | order(title asc) {
+      title,
+      slug
+    },
+    "tags": *[_type == "tag"] | order(title asc) {
+      title,
+      slug
+    },
+    "banner": *[_type == "banner"][0] {
+      alt,
+      image {
+        asset-> { url, metadata { lqip } }
+      }
+    }
+  }
+`;

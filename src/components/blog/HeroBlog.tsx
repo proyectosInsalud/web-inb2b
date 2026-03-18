@@ -122,7 +122,7 @@ export function HeroBlog({ posts }: HeroBlogProps) {
                         src={urlFor(post.cover.asset)
                           .width(900)
                           .height(675)
-                          .quality(85)
+                          .quality(80)
                           .auto("format")
                           .url()}
                         alt={post.cover.alt || post.title}

@@ -2,12 +2,7 @@ import type { Metadata } from "next";
 import { unstable_cache } from "next/cache";
 import { sanityClient } from "@/lib/sanity.client";
 import {
-  POSTS_PAGINATED,
-  TOTAL_POSTS,
-  LATEST_POSTS,
-  ALL_CATEGORIES,
-  ACTIVE_BANNER,
-  ALL_TAGS,
+  BLOG_PAGE_DATA,
 } from "@/lib/queries";
 import type { BlogPost, BlogCategory, BlogBanner, BlogTag } from "@/types/blog";
 import { HeroNav } from "@/components/pages/home/HeroNav";
@@ -19,44 +14,25 @@ const POSTS_PER_PAGE = 9;
 
 export const revalidate = 3600; // Incrementado a 1 hora (apoyado por revalidación on-demand)
 
-const getPosts = unstable_cache(
+interface BlogData {
+  posts: BlogPost[];
+  total: number;
+  latest: BlogPost[];
+  categories: BlogCategory[];
+  tags: BlogTag[];
+  banner: BlogBanner | null;
+}
+
+const getBlogData = unstable_cache(
   (start: number, end: number, search: string, category: string, tag: string) =>
-    sanityClient.fetch<BlogPost[]>(
-      POSTS_PAGINATED,
-      { start, end, search, category, tag } as Record<string, unknown>
-    ),
-  ["posts-paginated"],
-  { revalidate: 300 }
-);
-
-const getTotalPosts = unstable_cache(
-  (search: string, category: string, tag: string) =>
-    sanityClient.fetch<number>(TOTAL_POSTS, { search, category, tag } as Record<string, unknown>),
-  ["posts-total"],
-  { revalidate: 300 }
-);
-
-const getLatestPosts = unstable_cache(
-  (limit: number) => sanityClient.fetch<BlogPost[]>(LATEST_POSTS, { limit }),
-  ["posts-latest"],
-  { revalidate: 300 }
-);
-
-const getCategories = unstable_cache(
-  () => sanityClient.fetch<BlogCategory[]>(ALL_CATEGORIES),
-  ["blog-categories"],
-  { revalidate: 3600 }
-);
-
-const getTags = unstable_cache(
-  () => sanityClient.fetch<BlogTag[]>(ALL_TAGS),
-  ["blog-tags"],
-  { revalidate: 3600 }
-);
-
-const getActiveBanner = unstable_cache(
-  () => sanityClient.fetch<BlogBanner | null>(ACTIVE_BANNER),
-  ["blog-banner"],
+    sanityClient.fetch<BlogData>(BLOG_PAGE_DATA, {
+      start,
+      end,
+      search,
+      category,
+      tag,
+    } as Record<string, unknown>),
+  ["blog-page-consolidated"],
   { revalidate: 3600 }
 );
 
@@ -109,16 +85,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const start = (currentPage - 1) * POSTS_PER_PAGE;
   const end = start + POSTS_PER_PAGE;
 
-  const hasFilters = search || category || tag;
-
-  const [posts, totalPosts, latestPosts, categories, tags, banner] = await Promise.all([
-    getPosts(start, end, search, category, tag),
-    getTotalPosts(search, category, tag),
-    !hasFilters && currentPage === 1 ? getLatestPosts(3) : Promise.resolve([]),
-    getCategories(),
-    getTags(),
-    getActiveBanner(),
-  ]);
+  const data = await getBlogData(start, end, search, category, tag);
+  const { posts, total: totalPosts, latest: latestPosts, categories, tags, banner } = data;
 
   const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
 
