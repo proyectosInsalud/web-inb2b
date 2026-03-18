@@ -85,8 +85,21 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const start = (currentPage - 1) * POSTS_PER_PAGE;
   const end = start + POSTS_PER_PAGE;
 
-  const data = await getBlogData(start, end, search, category, tag);
-  const { posts, total: totalPosts, latest: latestPosts, categories, tags, banner } = data;
+  const data = await getBlogData(start, end, search, category, tag).catch((err) => {
+    console.error("Error fetching blog data:", err);
+    return null;
+  });
+
+  if (!data) {
+    return (
+      <div className="bg-in-blue-main min-h-screen pt-32 text-center text-white">
+        <h1>Error al cargar el blog</h1>
+        <p>Por favor, inténtalo de nuevo más tarde.</p>
+      </div>
+    );
+  }
+
+  const { posts = [], total: totalPosts = 0, latest: latestPosts = [], categories = [], tags = [], banner = null } = data;
 
   const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
 

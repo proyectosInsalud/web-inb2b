@@ -12,12 +12,12 @@ export const POSTS_PAGINATED = groq`
     excerpt,
     publishedAt,
     cover {
-      asset-> { _id, url, metadata { lqip } },
+      asset,
       alt
     },
     category-> { title, slug },
     tags[]-> { title, slug },
-    author-> { name, slug, image { asset-> { url } } }
+    author-> { name, slug, image { asset } }
   }
 `;
 
@@ -37,12 +37,12 @@ export const LATEST_POSTS = groq`
     excerpt,
     publishedAt,
     cover {
-      asset-> { _id, url, metadata { lqip } },
+      asset,
       alt
     },
     category-> { title, slug },
     tags[]-> { title, slug },
-    author-> { name, slug, image { asset-> { url } } }
+    author-> { name, slug, image { asset } }
   }
 `;
 
@@ -54,12 +54,12 @@ export const POST_BY_SLUG = groq`
     excerpt,
     publishedAt,
     cover {
-      asset-> { _id, url, metadata { lqip } },
+      asset,
       alt
     },
     category-> { title, slug },
     tags[]-> { title, slug },
-    author-> { name, slug, image { asset-> { url } } },
+    author-> { name, slug, image { asset } },
     seo { metaTitle, metaDescription },
     body[] {
       ...,
@@ -89,7 +89,7 @@ export const ACTIVE_BANNER = groq`
   *[_type == "banner"][0] {
     alt,
     image {
-      asset-> { url, metadata { lqip } }
+      asset
     }
   }
 `;
@@ -107,12 +107,12 @@ export const BLOG_PAGE_DATA = groq`
       excerpt,
       publishedAt,
       cover {
-        asset-> { _id, url, metadata { lqip } },
+        asset,
         alt
       },
       category-> { title, slug },
       tags[]-> { title, slug },
-      author-> { name, slug, image { asset-> { url } } }
+      author-> { name, slug, image { asset } }
     },
     "total": count(*[_type == "post"
       && ($search == "" || title match ($search + "*") || excerpt match ($search + "*"))
@@ -126,12 +126,12 @@ export const BLOG_PAGE_DATA = groq`
       excerpt,
       publishedAt,
       cover {
-        asset-> { _id, url, metadata { lqip } },
+        asset,
         alt
       },
       category-> { title, slug },
       tags[]-> { title, slug },
-      author-> { name, slug, image { asset-> { url } } }
+      author-> { name, slug, image { asset } }
     },
     "categories": *[_type == "category"] | order(title asc) {
       title,
@@ -144,7 +144,7 @@ export const BLOG_PAGE_DATA = groq`
     "banner": *[_type == "banner"][0] {
       alt,
       image {
-        asset-> { url, metadata { lqip } }
+        asset
       }
     }
   }

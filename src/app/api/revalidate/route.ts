@@ -1,5 +1,6 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
+import { sanityAdminClient } from "@/lib/sanity.client";
 import { parseBody } from "next-sanity/webhook";
 
 // Note: Ensure you set SANITY_REVALIDATE_SECRET in your .env
