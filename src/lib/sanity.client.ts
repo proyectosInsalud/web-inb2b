@@ -10,7 +10,7 @@ export const sanityClient = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: !token, // avoid CDN when authenticated to ensure fresh/private data
+  useCdn: true, // Siempre usar CDN para máximo rendimiento en el blog
   token,
 });
 

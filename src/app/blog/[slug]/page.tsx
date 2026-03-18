@@ -29,16 +29,13 @@ const getAllSlugs = unstable_cache(
   { revalidate: 300 }
 );
 
-export const revalidate = 300;
+export const revalidate = 3600;
 
 export async function generateMetadata({
   params,
 }: SlugPageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
-
-  if (!post) return { title: "Post no encontrado" };
-
 
   if (!post) return { title: "Post no encontrado" };
 
@@ -78,8 +75,37 @@ export default async function BlogSlugPage({ params }: SlugPageProps) {
 
   if (!post) notFound();
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.title,
+    "description": post.excerpt,
+    "image": post.cover?.asset ? urlFor(post.cover.asset).url() : undefined,
+    "datePublished": post.publishedAt,
+    "author": {
+      "@type": "Person",
+      "name": post.author?.name || "INB2B Team",
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "INB2B Health Partners",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://inb2blatam.com/favicon.svg"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://inb2blatam.com/blog/${slug}`
+    }
+  };
+
   return (
     <div className="bg-in-blue-main min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Nav */}
       <div className="pt-6">
         <HeroNav />

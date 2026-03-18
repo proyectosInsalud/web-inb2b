@@ -4,14 +4,14 @@ import { sanityClient } from "@/lib/sanity.client";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = "https://inb2blatam.com";
 
-  // Fetch all post slugs
-  const postsSlugs = await sanityClient.fetch<string[]>(
-    '*[_type == "post" && defined(slug.current)].slug.current'
+  // Fetch all post slugs and modification dates
+  const posts = await sanityClient.fetch<{ slug: string; _updatedAt: string }[]>(
+    '*[_type == "post" && defined(slug.current)]{ "slug": slug.current, _updatedAt }'
   );
 
-  const postUrls: MetadataRoute.Sitemap = postsSlugs.map((slug) => ({
-    url: `${base}/blog/${slug}`,
-    lastModified: new Date(),
+  const postUrls: MetadataRoute.Sitemap = posts.map((post) => ({
+    url: `${base}/blog/${post.slug}`,
+    lastModified: new Date(post._updatedAt),
     changeFrequency: "monthly",
     priority: 0.8,
   }));

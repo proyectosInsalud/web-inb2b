@@ -17,7 +17,7 @@ import { ContactHomeTab } from "@/components/pages/home/ContactHomeTab";
 
 const POSTS_PER_PAGE = 9;
 
-export const revalidate = 300;
+export const revalidate = 3600; // Incrementado a 1 hora (apoyado por revalidación on-demand)
 
 const getPosts = unstable_cache(
   (start: number, end: number, search: string, category: string, tag: string) =>
@@ -45,26 +45,56 @@ const getLatestPosts = unstable_cache(
 const getCategories = unstable_cache(
   () => sanityClient.fetch<BlogCategory[]>(ALL_CATEGORIES),
   ["blog-categories"],
-  { revalidate: 300 }
+  { revalidate: 3600 }
 );
 
 const getTags = unstable_cache(
   () => sanityClient.fetch<BlogTag[]>(ALL_TAGS),
   ["blog-tags"],
-  { revalidate: 300 }
+  { revalidate: 3600 }
 );
 
 const getActiveBanner = unstable_cache(
   () => sanityClient.fetch<BlogBanner | null>(ACTIVE_BANNER),
   ["blog-banner"],
-  { revalidate: 300 }
+  { revalidate: 3600 }
 );
 
-export const metadata: Metadata = {
-  title: "Blog",
-  description:
-    "Artículos, guías y novedades sobre el sector salud, transformación digital y emprendimiento en LATAM.",
-};
+export async function generateMetadata({
+  searchParams,
+}: BlogPageProps): Promise<Metadata> {
+  const params = await searchParams;
+  const isRoot = !params.page || params.page === "1";
+  const hasFilters = Boolean(params.search || params.category || params.tag);
+  // Aseguramos que solo se indexe la raíz sin filtros para evitar duplicidad
+  const shouldIndex = isRoot && !hasFilters;
+
+  return {
+    title: "Blog de Salud Digital y Gestión Clínica en LATAM | INB2B",
+    description:
+      "Centro de Salud Digital y Gestión Clínica en LATAM. Guías prácticas de expertos para escalar tu negocio de salud. ¡Entra ahora y optimiza tu gestión clínica! →",
+    alternates: {
+      canonical: "/blog",
+    },
+    robots: {
+      index: shouldIndex,
+      follow: true,
+      googleBot: {
+        index: shouldIndex,
+        follow: true,
+        "max-snippet": -1,
+        "max-image-preview": "large",
+      },
+    },
+    openGraph: {
+      title: "Blog de Salud Digital y Gestión Clínica en LATAM | INB2B",
+      description:
+        "Descubre guías prácticas sobre gestión clínica, salud digital y emprendimiento médico en LATAM. Contenido real de expertos del sector.",
+      url: "https://inb2blatam.com/blog",
+      type: "website",
+    },
+  };
+}
 
 interface BlogPageProps {
   searchParams: Promise<{ page?: string; search?: string; category?: string; tag?: string }>;
