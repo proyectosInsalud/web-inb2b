@@ -119,9 +119,9 @@ export const OurClients = () => {
                 <Image
                   src="/images/clients/18.png"
                   alt="Logo de cliente 18 - Cliente de INB2B"
-                  width={100}
-                  height={100}
-                  className="w-auto h-24 mx-auto"
+                  width={150}
+                  height={150}
+                  className="w-auto h-36 md:h-44 mx-auto object-contain scale-110"
                   unoptimized
                 />
               </div>
@@ -133,9 +133,9 @@ export const OurClients = () => {
                 <Image
                   src="/images/clients/19.png"
                   alt="Logo de cliente 19 - Cliente de INB2B"
-                  width={100}
-                  height={100}
-                  className="w-auto h-24 mx-auto"
+                  width={150}
+                  height={150}
+                  className="w-auto h-36 md:h-44 mx-auto object-contain scale-110"
                   unoptimized
                 />
               </div>
@@ -147,9 +147,9 @@ export const OurClients = () => {
                 <Image
                   src="/images/clients/20.png"
                   alt="Logo de cliente 20 - Cliente de INB2B"
-                  width={100}
-                  height={100}
-                  className="w-auto h-24 mx-auto"
+                  width={150}
+                  height={150}
+                  className="w-auto h-36 md:h-44 mx-auto object-contain scale-110"
                   unoptimized
                 />
               </div>
@@ -161,9 +161,9 @@ export const OurClients = () => {
                 <Image
                   src="/images/clients/21.png"
                   alt="Logo de cliente 21 - Cliente de INB2B"
-                  width={100}
-                  height={100}
-                  className="w-auto h-24 mx-auto"
+                  width={150}
+                  height={150}
+                  className="w-auto h-36 md:h-44 mx-auto object-contain scale-110"
                   unoptimized
                 />
               </div>
@@ -175,9 +175,9 @@ export const OurClients = () => {
                 <Image
                   src="/images/clients/22.png"
                   alt="Logo de cliente 22 - Cliente de INB2B"
-                  width={100}
-                  height={100}
-                  className="w-auto h-24 mx-auto"
+                  width={150}
+                  height={150}
+                  className="w-auto h-36 md:h-44 mx-auto object-contain scale-110"
                   unoptimized
                 />
               </div>
@@ -189,9 +189,9 @@ export const OurClients = () => {
                 <Image
                   src="/images/clients/23.png"
                   alt="Logo de cliente 23 - Cliente de INB2B"
-                  width={100}
-                  height={100}
-                  className="w-auto h-24 mx-auto"
+                  width={150}
+                  height={150}
+                  className="w-auto h-36 md:h-44 mx-auto object-contain scale-110"
                   unoptimized
                 />
               </div>
@@ -203,9 +203,9 @@ export const OurClients = () => {
                 <Image
                   src="/images/clients/24.png"
                   alt="Logo de cliente 24 - Cliente de INB2B"
-                  width={100}
-                  height={100}
-                  className="w-auto h-24 mx-auto"
+                  width={150}
+                  height={150}
+                  className="w-auto h-36 md:h-44 mx-auto object-contain scale-110"
                   unoptimized
                 />
               </div>
