@@ -86,7 +86,8 @@ export const ALL_TAGS = groq`
 `;
 
 export const ACTIVE_BANNER = groq`
-  *[_type == "banner"][0] {
+  *[_type == "banner" && active == true][0] {
+    active,
     alt,
     image {
       asset
@@ -141,7 +142,8 @@ export const BLOG_PAGE_DATA = groq`
       title,
       slug
     },
-    "banner": *[_type == "banner"][0] {
+    "banner": *[_type == "banner" && active == true][0] {
+      active,
       alt,
       image {
         asset-> { _id, url, metadata { lqip } }

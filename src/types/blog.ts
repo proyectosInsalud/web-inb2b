@@ -47,6 +47,7 @@ export interface BlogPost {
 }
 
 export interface BlogBanner {
+  active?: boolean;
   image: {
     asset: {
       url: string;

@@ -102,7 +102,7 @@ function BlogCard({ post }: { post: BlogPost }) {
 }
 
 function BannerCard({ banner }: { banner: BlogBanner }) {
-  if (!banner?.image?.asset) return null;
+  if (!banner?.active || !banner?.image?.asset) return null;
 
   return (
     <div className="rounded-2xl overflow-hidden border border-white/10 h-full min-h-0">
@@ -142,7 +142,7 @@ export function GridBlog({ posts, banner }: GridBlogProps) {
     <BlogCard key={post._id} post={post} />
   ));
 
-  if (banner && posts.length >= BANNER_POSITION) {
+  if (banner && banner.active !== false && posts.length >= BANNER_POSITION) {
     items.splice(BANNER_POSITION, 0, <BannerCard key="banner-publicitario" banner={banner} />);
   }
 
