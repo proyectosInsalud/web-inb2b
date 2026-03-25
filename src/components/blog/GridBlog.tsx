@@ -102,25 +102,17 @@ function BlogCard({ post }: { post: BlogPost }) {
 }
 
 function BannerCard({ banner }: { banner: BlogBanner }) {
-  if (!banner?.active || !banner?.image?.asset) return null;
+  if (!banner?.imageUrl) return null;
 
   return (
     <div className="rounded-2xl overflow-hidden border border-white/10 h-full min-h-0">
-      <div className="relative h-full w-full">
+      <div className="relative h-full w-full min-h-[300px] md:min-h-0">
         <Image
-          src={urlFor(banner.image.asset)
-            .width(600)
-            .height(400)
-            .quality(70)
-            .auto("format")
-            .url()}
+          src={banner.imageUrl}
           alt={banner.alt || "Banner publicitario"}
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          {...(banner.image.asset.metadata?.lqip
-            ? { placeholder: "blur", blurDataURL: banner.image.asset.metadata.lqip }
-            : {})}
         />
       </div>
     </div>
@@ -142,7 +134,7 @@ export function GridBlog({ posts, banner }: GridBlogProps) {
     <BlogCard key={post._id} post={post} />
   ));
 
-  if (banner && banner.active !== false && posts.length >= BANNER_POSITION) {
+  if (banner && posts.length >= BANNER_POSITION) {
     items.splice(BANNER_POSITION, 0, <BannerCard key="banner-publicitario" banner={banner} />);
   }
 

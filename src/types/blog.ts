@@ -45,16 +45,17 @@ export interface BlogPost {
   author?: BlogAuthor;
   tags?: BlogTag[];
 }
-
 export interface BlogBanner {
-  active?: boolean;
-  image: {
-    asset: {
-      url: string;
-      metadata?: { lqip?: string };
-    };
-  };
+  imageUrl: string;
   alt: string;
+  active: boolean;
+}
+
+export interface BlogPopup {
+  imageUrl: string;
+  alt: string;
+  link?: string;
+  active: boolean;
 }
 
 export interface BlogPostDetail extends BlogPost {

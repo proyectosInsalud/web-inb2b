@@ -6,6 +6,10 @@ import { WhatsAppButton } from "@/components/common/WhatsAppButton";
 import { AOSInit } from "@/components/common/AOSInit";
 import "aos/dist/aos.css";
 import Script from "next/script";
+import { sanityClient } from "@/lib/sanity.client";
+import { ACTIVE_POPUP } from "@/lib/queries";
+import { BlogPopup } from "@/types/blog";
+import { Popup } from "@/components/common/Popup";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -133,11 +137,15 @@ export const metadata: Metadata = {
   classification: "business",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const popup = await sanityClient.fetch<BlogPopup | null>(ACTIVE_POPUP, {}, {
+    next: { revalidate: 60 }
+  }).catch(() => null);
+
   return (
     <html lang="es" suppressHydrationWarning>
       <head>
@@ -160,6 +168,7 @@ export default function RootLayout({
       >
         <AOSInit />
         {children}
+        <Popup popup={popup} />
         <WhatsAppButton 
           phoneNumber="51943583887"
           message="¡Hola! Vi su web y me gustaría obtener más información sobre INB2B"

@@ -87,11 +87,9 @@ export const ALL_TAGS = groq`
 
 export const ACTIVE_BANNER = groq`
   *[_type == "banner" && active == true][0] {
-    active,
+    "imageUrl": image.asset->url,
     alt,
-    image {
-      asset
-    }
+    active
   }
 `;
 
@@ -143,11 +141,17 @@ export const BLOG_PAGE_DATA = groq`
       slug
     },
     "banner": *[_type == "banner" && active == true][0] {
-      active,
+      "imageUrl": image.asset->url,
       alt,
-      image {
-        asset-> { _id, url, metadata { lqip } }
-      }
+      active
     }
+  }
+`;
+export const ACTIVE_POPUP = groq`
+  *[_type == "popup" && active == true][0] | order(_updatedAt desc) {
+    "imageUrl": image.asset->url,
+    alt,
+    link,
+    active
   }
 `;
