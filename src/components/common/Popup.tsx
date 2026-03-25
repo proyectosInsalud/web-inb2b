@@ -15,22 +15,14 @@ export function Popup({ popup }: PopupProps) {
   useEffect(() => {
     if (!popup || !popup.active) return;
 
-    // Usamos el imageUrl como clave única para el popup
-    const hasSeenPopup = sessionStorage.getItem(`seen-popup-${popup.imageUrl}`);
-    
-    if (!hasSeenPopup) {
-      const timer = setTimeout(() => {
-        setIsVisible(true);
-      }, 1500); // Muestra el popup después de 1.5 segundos
-      return () => clearTimeout(timer);
-    }
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 1500); // Muestra el popup después de 1.5 segundos
+    return () => clearTimeout(timer);
   }, [popup]);
 
   const handleClose = () => {
     setIsVisible(false);
-    if (popup) {
-      sessionStorage.setItem(`seen-popup-${popup.imageUrl}`, "true");
-    }
   };
 
   if (!popup || !isVisible) return null;
