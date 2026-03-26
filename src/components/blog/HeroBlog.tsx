@@ -83,11 +83,11 @@ export function HeroBlog({ posts }: HeroBlogProps) {
                       {/* Footer */}
                       <div className="flex items-center justify-between gap-4 mt-6 flex-wrap">
                         <div className="flex items-center gap-2.5">
-                          {post.author?.image?.asset?.url ? (
+                          {post.author?.image?.asset ? (
                             <div className="relative w-9 h-9 rounded-full overflow-hidden">
                               <Image
-                                src={post.author.image.asset.url}
-                                alt={post.author.name}
+                                src={urlFor(post.author.image.asset).width(64).height(64).url()}
+                                alt={post.author.name || "Autor"}
                                 fill
                                 sizes="36px"
                                 className="object-cover"
@@ -151,9 +151,8 @@ export function HeroBlog({ posts }: HeroBlogProps) {
             <button
               key={i}
               onClick={() => emblaApi?.scrollTo(i)}
-              className={`w-3 h-3 rounded-full transition-colors ${
-                i === selectedIndex ? "bg-in-cyan" : "bg-white/25"
-              }`}
+              className={`w-3 h-3 rounded-full transition-colors ${i === selectedIndex ? "bg-in-cyan" : "bg-white/25"
+                }`}
               aria-label={`Ir al slide ${i + 1}`}
             />
           ))}

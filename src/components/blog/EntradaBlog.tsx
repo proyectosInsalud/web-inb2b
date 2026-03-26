@@ -51,9 +51,9 @@ export function EntradaBlog({ post }: EntradaBlogProps) {
         <div className="flex items-center gap-4 text-sm text-white/50 font-in-poppins">
           {post.author && (
             <div className="flex items-center gap-2">
-              {post.author.image?.asset?.url ? (
+              {post.author.image?.asset ? (
                 <Image
-                  src={post.author.image.asset.url}
+                  src={urlFor(post.author.image.asset).width(64).height(64).url()}
                   alt={post.author.name}
                   width={32}
                   height={32}
@@ -67,7 +67,7 @@ export function EntradaBlog({ post }: EntradaBlogProps) {
               <span className="text-white">{post.author.name}</span>
             </div>
           )}
-          <time>{formatFechaPeru(post.publishedAt)}</time>
+          <time suppressHydrationWarning>{formatFechaPeru(post.publishedAt)}</time>
         </div>
       </header>
 

@@ -166,8 +166,8 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} ${lato.variable} antialiased`}
         suppressHydrationWarning
       >
-        <AOSInit />
         {children}
+        <AOSInit />
         <Popup popup={popup} />
         <WhatsAppButton 
           phoneNumber="51943583887"

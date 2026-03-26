@@ -59,7 +59,11 @@ export const POST_BY_SLUG = groq`
     },
     category-> { title, slug },
     tags[]-> { title, slug },
-    author-> { name, slug, image { asset } },
+    author-> { 
+      name, 
+      slug, 
+      image { asset }
+    },
     seo { metaTitle, metaDescription },
     body[] {
       ...,

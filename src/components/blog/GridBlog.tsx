@@ -72,11 +72,11 @@ function BlogCard({ post }: { post: BlogPost }) {
 
           <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/5">
             <div className="flex items-center gap-2">
-              {post.author?.image?.asset?.url ? (
+              {post.author?.image?.asset ? (
                 <div className="relative w-6 h-6 rounded-full overflow-hidden flex-shrink-0">
                   <Image
-                    src={post.author.image.asset.url}
-                    alt={post.author.name}
+                    src={urlFor(post.author.image.asset).width(48).height(48).url()}
+                    alt={post.author.name || "Autor"}
                     fill
                     className="object-cover"
                     sizes="24px"

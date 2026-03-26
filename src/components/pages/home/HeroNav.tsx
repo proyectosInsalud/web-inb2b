@@ -70,7 +70,7 @@ export const HeroNav = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Contactanos
+              Contáctanos
             </Link>
           </div>
 
@@ -156,7 +156,7 @@ export const HeroNav = () => {
                 rel="noopener noreferrer"
                 onClick={closeMenu}
               >
-                Contactanos
+                Contáctanos
               </Link>
             </div>
           )}
