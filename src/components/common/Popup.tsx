@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { BlogPopup } from "@/types/blog";
 import { X } from "lucide-react";
 
@@ -11,15 +12,19 @@ interface PopupProps {
 
 export function Popup({ popup }: PopupProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!popup || !popup.active) return;
 
+    // Reset visibility on route change
+    setIsVisible(false);
+
     const timer = setTimeout(() => {
       setIsVisible(true);
-    }, 1500); // Muestra el popup después de 1.5 segundos
+    }, 1500); // Muestra el popup tras 1.5 segundos en CUALQUIER vista
     return () => clearTimeout(timer);
-  }, [popup]);
+  }, [popup, pathname]);
 
   const handleClose = () => {
     setIsVisible(false);

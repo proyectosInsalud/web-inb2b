@@ -66,15 +66,31 @@ export async function generateMetadata({
       description,
       type: "article",
       publishedTime: post.publishedAt,
+      url: `/blog/${slug}`,
+      siteName: "INB2B Health Partners",
+      locale: "es_ES",
       ...(imageUrl && {
-        images: [{ url: imageUrl, width: 1200, height: 630 }],
+        images: [
+          {
+            url: imageUrl,
+            width: 1200,
+            height: 630,
+            alt: post.title,
+          },
+        ],
       }),
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      ...(imageUrl && { images: [imageUrl] }),
+      site: "@inb2b_health",
+      ...(imageUrl && { 
+        images: [{ 
+          url: imageUrl, 
+          alt: post.title 
+        }] 
+      }),
     },
   };
 }
