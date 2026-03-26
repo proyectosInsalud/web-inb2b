@@ -134,8 +134,10 @@ export function GridBlog({ posts, banner }: GridBlogProps) {
     <BlogCard key={post._id} post={post} />
   ));
 
-  if (banner && posts.length >= BANNER_POSITION) {
-    items.splice(BANNER_POSITION, 0, <BannerCard key="banner-publicitario" banner={banner} />);
+  // Insert banner at index 3 (4th position)
+  if (banner && posts.length >= 1) {
+    const insertIndex = Math.min(posts.length, BANNER_POSITION);
+    items.splice(insertIndex, 0, <BannerCard key="banner-publicitario" banner={banner} />);
   }
 
   return (
