@@ -50,7 +50,12 @@ export async function generateMetadata({
   const title = truncateTitle(rawTitle);
   const description = post.seo?.metaDescription || post.excerpt || "";
   const imageUrl = post.cover?.asset
-    ? urlFor(post.cover.asset).width(1200).height(630).url()
+    ? urlFor(post.cover.asset)
+        .width(1200)
+        .height(630)
+        .fit("crop")
+        .auto("format")
+        .url()
     : undefined;
 
   return {
@@ -66,7 +71,7 @@ export async function generateMetadata({
       description,
       type: "article",
       publishedTime: post.publishedAt,
-      url: `/blog/${slug}`,
+      url: `https://inb2blatam.com/blog/${slug}`, // URL absoluta explícita
       siteName: "INB2B Health Partners",
       locale: "es_ES",
       ...(imageUrl && {
@@ -76,6 +81,7 @@ export async function generateMetadata({
             width: 1200,
             height: 630,
             alt: post.title,
+            type: "image/jpeg", // Formato explícito
           },
         ],
       }),
@@ -86,10 +92,7 @@ export async function generateMetadata({
       description,
       site: "@inb2b_health",
       ...(imageUrl && { 
-        images: [{ 
-          url: imageUrl, 
-          alt: post.title 
-        }] 
+        images: [imageUrl] // Algunos scrapers prefieren el string directo
       }),
     },
   };
