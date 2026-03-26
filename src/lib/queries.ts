@@ -86,7 +86,7 @@ export const ALL_TAGS = groq`
 `;
 
 export const ACTIVE_BANNER = groq`
-  *[_type == "banner" && active == true][0] {
+  *[_type == "banner" && active == true] | order(_updatedAt desc) [0] {
     "imageUrl": image.asset->url,
     alt,
     active
@@ -140,7 +140,7 @@ export const BLOG_PAGE_DATA = groq`
       title,
       slug
     },
-    "banner": *[_type == "banner" && active == true][0] {
+    "banner": *[_type == "banner" && active == true] | order(_updatedAt desc) [0] {
       "imageUrl": image.asset->url,
       alt,
       active
@@ -148,7 +148,7 @@ export const BLOG_PAGE_DATA = groq`
   }
 `;
 export const ACTIVE_POPUP = groq`
-  *[_type == "popup" && active == true][0] | order(_updatedAt desc) {
+  *[_type == "popup" && active == true] | order(_updatedAt desc) [0] {
     "imageUrl": image.asset->url,
     alt,
     link,

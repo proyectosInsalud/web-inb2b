@@ -34,10 +34,10 @@ export function Popup({ popup }: PopupProps) {
         onClick={(e) => e.stopPropagation()}
         data-aos="zoom-in"
       >
-        <div className="relative bg-white rounded-2xl overflow-hidden shadow-2xl">
+        <div className="relative rounded-2xl overflow-hidden shadow-2xl">
           <button
             onClick={handleClose}
-            className="absolute top-3 right-3 bg-white/80 backdrop-blur-md rounded-full p-1.5 shadow-lg hover:bg-white transition-all z-20 group"
+            className="absolute top-3 right-3 bg-white/40 backdrop-blur-md rounded-full p-1.5 shadow-lg hover:bg-white transition-all z-20 group"
             aria-label="Cerrar"
           >
             <X size={20} className="text-gray-800 group-hover:scale-110 transition-transform" />
@@ -55,7 +55,7 @@ export function Popup({ popup }: PopupProps) {
                 alt={popup.alt}
                 width={800}
                 height={800}
-                className="w-full h-auto object-contain max-h-[80vh]"
+                className="w-full h-auto object-contain max-h-[85vh] block"
                 priority
               />
             </a>
@@ -65,7 +65,7 @@ export function Popup({ popup }: PopupProps) {
               alt={popup.alt}
               width={800}
               height={800}
-              className="w-full h-auto object-contain max-h-[80vh]"
+              className="w-full h-auto object-contain max-h-[85vh] block"
               priority
             />
           )}
