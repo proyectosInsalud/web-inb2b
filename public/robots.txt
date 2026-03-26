@@ -1,9 +1,0 @@
-# *
-User-agent: *
-Disallow: /api
-
-# Host
-Host: https://inb2blatam.com/
-
-# Sitemaps
-Sitemap: https://inb2blatam.com/sitemap.xml
