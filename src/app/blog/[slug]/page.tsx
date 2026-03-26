@@ -22,7 +22,7 @@ const truncateTitle = (text: string, limit = 60) => {
 async function getPostBySlug(slug: string) {
   return sanityClient.fetch<BlogPostDetail | null>(POST_BY_SLUG, { slug }, {
     next: { 
-      revalidate: 3600,
+      revalidate: 60,
       tags: [`post-${slug}`]
     }
   });
@@ -36,7 +36,7 @@ async function getAllSlugs() {
   );
 }
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 export async function generateMetadata({
   params,

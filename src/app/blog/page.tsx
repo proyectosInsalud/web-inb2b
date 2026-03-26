@@ -12,7 +12,7 @@ import { ContactHomeTab } from "@/components/pages/home/ContactHomeTab";
 
 const POSTS_PER_PAGE = 9;
 
-export const revalidate = 3600; // Incrementado a 1 hora (apoyado por revalidación on-demand)
+export const revalidate = 60; // Reducido a 1 minuto para actualizaciones más rápidas en producción
 
 interface BlogData {
   posts: BlogPost[];
@@ -37,7 +37,7 @@ async function getBlogData(start: number, end: number, search: string, category:
     tag,
   } as Record<string, unknown>, {
     next: { 
-      revalidate: 3600,
+      revalidate: 60,
       tags: ["blog-list"] 
     }
   });
