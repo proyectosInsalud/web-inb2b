@@ -54,7 +54,7 @@ export async function generateMetadata({
         .width(1200)
         .height(630)
         .fit("crop")
-        .auto("format")
+        .format("jpg") // Forzamos JPG para máxima compatibilidad
         .url()
     : undefined;
 
