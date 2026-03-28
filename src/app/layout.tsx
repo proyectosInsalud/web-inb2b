@@ -223,8 +223,15 @@ export default async function RootLayout({
             `
           }
         </Script>
+
+        <Script id="metricool-tracker" strategy="afterInteractive">
+          {`
+            function loadScript(a){var b=document.getElementsByTagName("head")[0],c=document.createElement("script");c.type="text/javascript",c.src="https://tracker.metricool.com/resources/be.js",c.onreadystatechange=a,c.onload=a,b.appendChild(c)}loadScript(function(){beTracker.t({hash:"7f9c192cd01ccfb50a41dbb95af50fd9"})});
+          `}
+        </Script>
         
         <noscript>
+
           <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N8TX8MK5"
             height="0" width="0" style={{ display: "none", visibility: "hidden" }}>
           </iframe>
