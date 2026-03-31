@@ -129,9 +129,22 @@ export default function FormContactLibro() {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    
+    setForm((prev) => {
+      const next = { ...prev, [name]: value };
+      // Si cambia el tipo de documento, limpiar el número para forzar la re-validación
+      if (name === "tipoDocumento") {
+        next.numeroDocumento = "";
+      }
+      return next;
+    });
+
     if (errors[name as keyof FormData]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
+    // Si cambia el tipo, limpiar el error del número también
+    if (name === "tipoDocumento" && errors.numeroDocumento) {
+      setErrors((prev) => ({ ...prev, numeroDocumento: undefined }));
     }
   };
 
@@ -372,7 +385,9 @@ export default function FormContactLibro() {
             <label className={labelClass}>Número de documento <span className="text-red-500">*</span></label>
             <input name="numeroDocumento" value={form.numeroDocumento} onChange={handleChange}
               onKeyDown={form.tipoDocumento === "DNI" || form.tipoDocumento === "RUC" ? blockNonDigits : undefined}
-              className={inputClass("numeroDocumento")} placeholder="Número de documento"
+              disabled={!form.tipoDocumento}
+              className={`${inputClass("numeroDocumento")} disabled:bg-gray-100 disabled:cursor-not-allowed`} 
+              placeholder={form.tipoDocumento ? "Número de documento" : "Primero seleccione el tipo"}
               maxLength={20} />
             {errMsg("numeroDocumento")}
           </div>

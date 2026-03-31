@@ -58,8 +58,8 @@ export const Footer = () => {
                                 <Image
                                     src="/images/libro_de_reclamaciones.png"
                                     alt="Libro de Reclamaciones"
-                                    width={120}
-                                    height={48}
+                                    width={90}
+                                    height={36}
                                     className="rounded-md object-contain hover:opacity-90 transition-opacity"
                                 />
                             </Link>
