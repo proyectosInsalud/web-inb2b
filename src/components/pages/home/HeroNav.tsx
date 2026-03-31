@@ -4,14 +4,14 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-export const HeroNav = () => {
+export const HeroNav = ({ isStatic = false }: { isStatic?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const closeMenu = () => setIsOpen(false);
 
   return (
     <div className="px-4 md:px-0">
-      <div className="container md:backdrop-blur-[35px] md:bg-[linear-gradient(181deg,rgba(255,255,255,0.50)_1.15%,rgba(255,255,255,0.00)_98.91%)] max-w-7xl md:fixed md:left-1/2 md:-translate-x-1/2 md:top-6 md:z-30 mx-auto md:px-10 rounded-[30px] md:py-4 lg:py-0">
+      <div className={`container md:backdrop-blur-[35px] md:bg-[linear-gradient(181deg,rgba(255,255,255,0.50)_1.15%,rgba(255,255,255,0.00)_98.91%)] max-w-7xl ${isStatic ? "md:absolute" : "md:fixed"} md:left-1/2 md:-translate-x-1/2 md:top-6 md:z-30 mx-auto md:px-10 rounded-[30px] md:py-4 lg:py-0`}>
         <nav className="relative z-40 flex items-center justify-between py-4 lg:py-6 text-gray-100 font-in-poppins md:grid md:grid-cols-3 md:items-center">
           <div className="hidden md:flex md:justify-start md:items-center gap-4 md:gap-6 text-end text-sm md:text-base whitespace-nowrap">
             <Link
