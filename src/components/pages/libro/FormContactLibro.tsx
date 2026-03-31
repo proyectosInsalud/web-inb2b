@@ -177,16 +177,24 @@ export default function FormContactLibro() {
       e.apellidoMaterno = "Solo se permiten letras";
     }
 
-    // Documento
-    const docError = validarDocumento(form.tipoDocumento, form.numeroDocumento);
-    if (docError) e.numeroDocumento = docError;
-    if (form.numeroDocumento.trim() && !form.tipoDocumento) {
+    // Documento — Obligatorio
+    if (!form.tipoDocumento) {
       e.tipoDocumento = "Seleccione el tipo de documento";
     }
+    if (!form.numeroDocumento.trim()) {
+      e.numeroDocumento = "Campo obligatorio";
+    } else {
+      const docError = validarDocumento(form.tipoDocumento, form.numeroDocumento);
+      if (docError) e.numeroDocumento = docError;
+    }
 
-    // Teléfono
-    const telError = validarTelefono(form.telefono);
-    if (telError) e.telefono = telError;
+    // Teléfono — Obligatorio
+    if (!form.telefono.trim()) {
+      e.telefono = "Campo obligatorio";
+    } else {
+      const telError = validarTelefono(form.telefono);
+      if (telError) e.telefono = telError;
+    }
 
     // Correo — obligatorio
     if (!form.correo.trim()) {
@@ -195,20 +203,39 @@ export default function FormContactLibro() {
       e.correo = "Correo electrónico inválido";
     }
 
-    // Ubicación — solo letras si se completan
-    if (form.departamento.trim() && !soloLetras.test(form.departamento.trim()))
+    // Ubicación — Obligatorio
+    if (!form.direccion.trim()) {
+      e.direccion = "Campo obligatorio";
+    }
+    
+    if (!form.departamento.trim()) {
+      e.departamento = "Campo obligatorio";
+    } else if (!soloLetras.test(form.departamento.trim())) {
       e.departamento = "Solo se permiten letras";
-    if (form.provincia.trim() && !soloLetras.test(form.provincia.trim()))
+    }
+
+    if (!form.provincia.trim()) {
+      e.provincia = "Campo obligatorio";
+    } else if (!soloLetras.test(form.provincia.trim())) {
       e.provincia = "Solo se permiten letras";
-    if (form.distrito.trim() && !soloLetras.test(form.distrito.trim()))
+    }
+
+    if (!form.distrito.trim()) {
+      e.distrito = "Campo obligatorio";
+    } else if (!soloLetras.test(form.distrito.trim())) {
       e.distrito = "Solo se permiten letras";
+    }
 
     // Tutor legal si es menor de edad
     if (form.menorDeEdad === "si" && !form.nombreTutorLegal.trim()) {
       e.nombreTutorLegal = "El nombre del tutor legal es obligatorio";
     }
 
-    // Sección 2
+    // Sección 2 — Obligatorio
+    if (!form.tipoProducto) {
+      e.tipoProducto = "Seleccione el tipo de bien o servicio contratado";
+    }
+    
     const montoError = validarMonto(form.monto);
     if (montoError) e.monto = montoError;
 
@@ -330,7 +357,7 @@ export default function FormContactLibro() {
           </div>
 
           <div>
-            <label className={labelClass}>Tipo de documento</label>
+            <label className={labelClass}>Tipo de documento <span className="text-red-500">*</span></label>
             <select name="tipoDocumento" value={form.tipoDocumento} onChange={handleChange}
               className={inputClass("tipoDocumento")}>
               <option value="">Seleccione un tipo</option>
@@ -342,7 +369,7 @@ export default function FormContactLibro() {
             {errMsg("tipoDocumento")}
           </div>
           <div>
-            <label className={labelClass}>Número de documento</label>
+            <label className={labelClass}>Número de documento <span className="text-red-500">*</span></label>
             <input name="numeroDocumento" value={form.numeroDocumento} onChange={handleChange}
               onKeyDown={form.tipoDocumento === "DNI" || form.tipoDocumento === "RUC" ? blockNonDigits : undefined}
               className={inputClass("numeroDocumento")} placeholder="Número de documento"
@@ -350,7 +377,7 @@ export default function FormContactLibro() {
             {errMsg("numeroDocumento")}
           </div>
           <div>
-            <label className={labelClass}>Teléfono fijo o celular</label>
+            <label className={labelClass}>Teléfono fijo o celular <span className="text-red-500">*</span></label>
             <input name="telefono" value={form.telefono} onChange={handleChange}
               onKeyDown={blockNonPhone}
               className={inputClass("telefono")} placeholder="Ej: 987654321"
@@ -366,10 +393,11 @@ export default function FormContactLibro() {
             {errMsg("correo")}
           </div>
           <div>
-            <label className={labelClass}>Dirección</label>
+            <label className={labelClass}>Dirección <span className="text-red-500">*</span></label>
             <input name="direccion" value={form.direccion} onChange={handleChange}
-              className={inputClass()} placeholder="Ingrese su dirección"
+              className={inputClass("direccion")} placeholder="Ingrese su dirección"
               maxLength={150} />
+            {errMsg("direccion")}
           </div>
           <div>
             <label className={labelClass}>Referencia</label>
@@ -379,7 +407,7 @@ export default function FormContactLibro() {
           </div>
 
           <div>
-            <label className={labelClass}>Departamento</label>
+            <label className={labelClass}>Departamento <span className="text-red-500">*</span></label>
             <input name="departamento" value={form.departamento} onChange={handleChange}
               onKeyDown={blockNonLetters}
               className={inputClass("departamento")} placeholder="Ingrese el departamento"
@@ -387,7 +415,7 @@ export default function FormContactLibro() {
             {errMsg("departamento")}
           </div>
           <div>
-            <label className={labelClass}>Provincia</label>
+            <label className={labelClass}>Provincia <span className="text-red-500">*</span></label>
             <input name="provincia" value={form.provincia} onChange={handleChange}
               onKeyDown={blockNonLetters}
               className={inputClass("provincia")} placeholder="Ingrese la provincia"
@@ -395,7 +423,7 @@ export default function FormContactLibro() {
             {errMsg("provincia")}
           </div>
           <div>
-            <label className={labelClass}>Distrito</label>
+            <label className={labelClass}>Distrito <span className="text-red-500">*</span></label>
             <input name="distrito" value={form.distrito} onChange={handleChange}
               onKeyDown={blockNonLetters}
               className={inputClass("distrito")} placeholder="Ingrese el distrito"
@@ -445,9 +473,9 @@ export default function FormContactLibro() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className={labelClass}>Tipo de Producto</label>
+            <label className={labelClass}>Tipo de Producto <span className="text-red-500">*</span></label>
             <select name="tipoProducto" value={form.tipoProducto} onChange={handleChange}
-              className={inputClass()}>
+              className={inputClass("tipoProducto")}>
               <option value="">Seleccione el tipo de producto</option>
               <option value="Consultoría">Consultoría</option>
               <option value="Programa / Diplomado">Programa / Diplomado</option>
@@ -455,6 +483,7 @@ export default function FormContactLibro() {
               <option value="Membresía">Membresía</option>
               <option value="Otro">Otro</option>
             </select>
+            {errMsg("tipoProducto")}
           </div>
           <div>
             <label className={labelClass}>Monto (S/)</label>
