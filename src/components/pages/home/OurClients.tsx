@@ -11,7 +11,7 @@ import Autoplay from "embla-carousel-autoplay";
 export const OurClients = () => {
   return (
     <div className="bg-in-blue-main">
-      <section  data-aos="fade-up" data-aos-duration="1000"  className="container mx-auto max-w-7xl px-4 py-16">
+      <section data-aos="fade-up" data-aos-duration="1000" className="container mx-auto max-w-7xl px-4 py-16">
         <h2 className="font-in-avantgarde text-2xl md:text-3xl lg:text-4xl text-center text-white pb-8 md:pb-16">
           Nuestros clientes
         </h2>
@@ -91,7 +91,7 @@ export const OurClients = () => {
                 <Image
                   src="/images/clients/ceo-salud.png"
                   alt="Logo de CEO Salud - Cliente de INB2B"
-                  width={100} 
+                  width={100}
                   height={100}
                   className="w-auto h-24 mx-auto"
                   unoptimized
@@ -112,7 +112,7 @@ export const OurClients = () => {
                 />
               </div>
             </CarouselItem>
-            <CarouselItem className="sm:basis-1/2 lg:basis-1/4 xl:basis-1/6">
+            {/* <CarouselItem className="sm:basis-1/2 lg:basis-1/4 xl:basis-1/6">
               <div
                 className="p-6 rounded-3xl h-[240px] flex flex-col justify-center"
               >
@@ -125,8 +125,8 @@ export const OurClients = () => {
                   unoptimized
                 />
               </div>
-            </CarouselItem>
-            <CarouselItem className="sm:basis-1/2 lg:basis-1/4 xl:basis-1/6">
+            </CarouselItem> */}
+            {/* <CarouselItem className="sm:basis-1/2 lg:basis-1/4 xl:basis-1/6">
               <div
                 className="p-6 rounded-3xl h-[240px] flex flex-col justify-center"
               >
@@ -139,7 +139,7 @@ export const OurClients = () => {
                   unoptimized
                 />
               </div>
-            </CarouselItem>
+            </CarouselItem> */}
             <CarouselItem className="sm:basis-1/2 lg:basis-1/4 xl:basis-1/6">
               <div
                 className="p-6 rounded-3xl h-[240px] flex flex-col justify-center"
