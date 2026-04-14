@@ -10,7 +10,7 @@ import { Blog } from "@/components/blog/Blog";
 import { BlogCTA } from "@/components/blog/BlogCTA";
 import { ContactHomeTab } from "@/components/pages/home/ContactHomeTab";
 
-const POSTS_PER_PAGE = 9;
+const POSTS_PER_PAGE = 8;
 
 export const revalidate = 60; // Reducido a 1 minuto para actualizaciones más rápidas en producción
 
@@ -112,7 +112,14 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     );
   }
 
-  const { posts = [], total: totalPosts = 0, latest: latestPosts = [], categories = [], tags = [], banner = null } = data;
+  const { 
+    posts = [], 
+    total: totalPosts = 0, 
+    latest: latestPosts = [], 
+    categories = [], 
+    tags = [], 
+    banner = null 
+  } = data;
 
   const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
 

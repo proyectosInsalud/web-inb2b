@@ -13,6 +13,8 @@ interface GridBlogProps {
 }
 
 function BlogCard({ post }: { post: BlogPost }) {
+  if (!post.slug?.current) return null;
+
   return (
     <Link href={`/blog/${post.slug.current}`} className="block group">
       <article className="rounded-2xl overflow-hidden bg-white/[0.04] border border-white/10 h-full flex flex-col hover:border-in-cyan/30 transition-colors">
@@ -130,14 +132,15 @@ export function GridBlog({ posts, banner }: GridBlogProps) {
     );
   }
 
-  const items: React.ReactNode[] = posts.map((post) => (
-    <BlogCard key={post._id} post={post} />
-  ));
+  const items: React.ReactNode[] = posts
+    .filter(post => post && post.slug?.current)
+    .map((post) => (
+      <BlogCard key={post._id} post={post} />
+    ));
 
   // Insert banner at index 3 (4th position)
-  if (banner && posts.length >= 1) {
-    const insertIndex = Math.min(posts.length, BANNER_POSITION);
-    items.splice(insertIndex, 0, <BannerCard key="banner-publicitario" banner={banner} />);
+  if (banner && items.length >= BANNER_POSITION) {
+    items.splice(BANNER_POSITION, 0, <BannerCard key="banner-publicitario" banner={banner} />);
   }
 
   return (
