@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -19,6 +20,7 @@ import { Label } from "@/components/ui/label";
 const WHATSAPP_NUMBER = "51943583887"; // Reemplaza con tu número de WhatsApp
 
 export const FormContactHome = () => {
+  const [loading, setLoading] = useState(false);
   const form = useForm<FormContactHomeType>({
     resolver: zodResolver(formContactHomeSchema),
     defaultValues: {
@@ -30,23 +32,37 @@ export const FormContactHome = () => {
     },
   });
 
-  function onSubmit(data: FormContactHomeType) {
-    // Evento de Tag Manager antes de abrir WhatsApp
-    if (typeof window !== "undefined") {
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        event: "formSubmissionWsp",
+  async function onSubmit(data: FormContactHomeType) {
+    setLoading(true);
+    try {
+      // Guardar en Google Sheets
+      await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
       });
+
+      // Evento de Tag Manager antes de abrir WhatsApp
+      if (typeof window !== "undefined") {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "formSubmissionWsp",
+        });
+      }
+
+      const message = encodeURIComponent(
+        `¡Hola! Mi nombre es ${data.nombre} ${data.apellido}.\n\n${
+          data.empresa ? `Represento a la empresa: ${data.empresa}\n` : ""
+        }Teléfono de contacto: ${data.telefono}\n\nMensaje: ${data.mensaje}`
+      );
+
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+      window.open(whatsappUrl, "_blank");
+    } catch (error) {
+      console.error("Error al enviar el formulario:", error);
+    } finally {
+      setLoading(false);
     }
-
-    const message = encodeURIComponent(
-      `¡Hola! Mi nombre es ${data.nombre} ${data.apellido}.\n\n${
-        data.empresa ? `Represento a la empresa: ${data.empresa}\n` : ""
-      }Teléfono de contacto: ${data.telefono}\n\nMensaje: ${data.mensaje}`
-    );
-
-    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
-    window.open(whatsappUrl, "_blank");
   }
   
   return (
@@ -184,8 +200,9 @@ export const FormContactHome = () => {
           <Button
             className="w-full bg-in-cyan text-black hover:bg-in-cyan/80 cursor-pointer font-in-poppins"
             type="submit"
+            disabled={loading}
           >
-            Enviar
+            {loading ? "Enviando..." : "Enviar"}
           </Button>
         </form>
       </Form>
