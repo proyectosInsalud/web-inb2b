@@ -42,6 +42,16 @@ export const FormContactHome = () => {
         body: JSON.stringify(data),
       });
 
+      // Persistir teléfono para no volver a pedirlo en CTAs
+      try {
+        localStorage.setItem(
+          "inb2b_phone_lead",
+          JSON.stringify({ phone: data.telefono, capturedAt: new Date().toISOString() })
+        );
+      } catch {
+        // ignorar si localStorage no está disponible
+      }
+
       // Evento de Tag Manager antes de abrir WhatsApp
       if (typeof window !== "undefined") {
         window.dataLayer = window.dataLayer || [];

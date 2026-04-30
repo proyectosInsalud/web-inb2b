@@ -4,12 +4,14 @@ import { useState } from "react";
 import { ChevronDown, ChevronUp, Star } from "lucide-react";
 import { servicesData } from "@/data/servicesData";
 import { cn } from "@/lib/utils";
+import { usePhoneLead } from "@/context/PhoneLeadContext";
 
 interface GridServicesProps {
   serviceId?: string;
 }
 
 export const GridServices = ({ serviceId }: GridServicesProps) => {
+  const { triggerCTA } = usePhoneLead();
   const activeService =
     servicesData.find((s) => s.id === serviceId) ?? servicesData[0];
 
@@ -141,14 +143,17 @@ export const GridServices = ({ serviceId }: GridServicesProps) => {
                         </span>
                       </div>
                     )}
-                    <a
-                      href={`https://wa.me/51943583887?text=${encodeURIComponent(`¡Hola! Me interesa el servicio de "${item.title}" y quisiera agendar una consultoría.`)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-in-cyan text-in-blue-dark text-sm font-semibold text-center px-4 py-3 rounded-2xl hover:bg-in-cyan/80 transition-colors duration-300"
+                    <button
+                      onClick={() =>
+                        triggerCTA(
+                          `https://wa.me/51943583887?text=${encodeURIComponent(`¡Hola! Me interesa el servicio de "${item.title}" y quisiera agendar una consultoría.`)}`,
+                          `Agenda tu consultoría - ${item.title}`
+                        )
+                      }
+                      className="bg-in-cyan text-in-blue-dark text-sm font-semibold text-center px-4 py-3 rounded-2xl hover:bg-in-cyan/80 transition-colors duration-300 cursor-pointer w-full"
                     >
                       Agenda tu consultoría
-                    </a>
+                    </button>
                   </div>
                 )}
               </div>

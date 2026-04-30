@@ -1,9 +1,14 @@
+"use client";
 import Image from "next/image";
 import { benefitsMain } from "@/data/benefitsMain";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
-import Link from "next/link";
+import { usePhoneLead } from "@/context/PhoneLeadContext";
+
+const CLUB_HREF = "https://chat.whatsapp.com/CDs3m8GxO4N5G9hgVO2kMo?mode=r_t";
 
 export const ClubBenefits = () => {
+  const { triggerCTA } = usePhoneLead();
+
   return (
     <div id="health-business-club" className="bg-in-blue-main">
       <section className="container mx-auto max-w-6xl px-4 py-16">
@@ -25,7 +30,7 @@ export const ClubBenefits = () => {
               className="sm:hidden w-full h-auto block"
               unoptimized
             />
-            <div 
+            <div
                 className="absolute bottom-0 left-0 w-full h-1/2 pointer-events-none"
                 style={{
                     background: "linear-gradient(0deg, rgba(24, 41, 77, 0.85) 0%, rgba(24, 41, 77, 0.45) 60%, rgba(24, 41, 77, 0.00) 100%)"
@@ -41,10 +46,9 @@ export const ClubBenefits = () => {
                 Latinoamérica.
             </p>
           </div>
-         
         </div>
 
-        <p  data-aos="fade-up" data-aos-duration="1000"  className="text-center text-white font-in-poppins md:text-lg leading-6 mb-10">
+        <p data-aos="fade-up" data-aos-duration="1000" className="text-center text-white font-in-poppins md:text-lg leading-6 mb-10">
           El Health Business Club de INB2B es un espacio exclusivo donde
           reunimos a directores, emprendedores, inversores y profesionales del
           sector salud para generar conexiones estratégicas, compartir
@@ -55,24 +59,20 @@ export const ClubBenefits = () => {
           <div className="h-2 w-2 rounded-full bg-in-cyan mx-auto absolute bottom-0 left-1/2 -translate-x-1/2"></div>
         </div>
       </section>
-      <section  data-aos="fade-up" data-aos-duration="1000"  className="container mx-auto max-w-7xl px-4 pb-16">
+      <section data-aos="fade-up" data-aos-duration="1000" className="container mx-auto max-w-7xl px-4 pb-16">
         <h2 className="font-in-avantgarde text-2xl md:text-3xl lg:text-4xl text-center text-white pb-8 md:pb-16">
           ¿Qué ofrece el club?
         </h2>
 
         <div>
           <Carousel className="w-full">
-            <CarouselContent
-              className="w-full max-w-7xl mx-auto -ml-4"
-            >
-
-
-            {benefitsMain.map((benefit) => (
-              <CarouselItem
-              className="sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
-                key={benefit.text}
-              >
-                <div 
+            <CarouselContent className="w-full max-w-7xl mx-auto -ml-4">
+              {benefitsMain.map((benefit) => (
+                <CarouselItem
+                  className="sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
+                  key={benefit.text}
+                >
+                  <div
                     className="p-6 rounded-3xl h-[240px] flex flex-col justify-center"
                     key={benefit.text}
                     style={{
@@ -81,29 +81,29 @@ export const ClubBenefits = () => {
                       boxShadow:
                         "0px 2.874px 17.246px -0.719px rgba(0, 0, 0, 0.20)",
                     }}
-                >
+                  >
                     <Image
-                    src={benefit.image}
-                    alt={benefit.text}
-                    width={100}
-                    height={100}
-                    className="w-24 h-24 mx-auto"
+                      src={benefit.image}
+                      alt={benefit.text}
+                      width={100}
+                      height={100}
+                      className="w-24 h-24 mx-auto"
                     />
                     <p className="text-white text-center font-in-poppins leading-6">
-                    {benefit.text}
+                      {benefit.text}
                     </p>
-                </div>
-               
-              </CarouselItem>
-            ))}
-                </CarouselContent>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
           </Carousel>
         </div>
-        <Link className="cta-club-custom" href="https://chat.whatsapp.com/CDs3m8GxO4N5G9hgVO2kMo?mode=r_t" target="_blank" rel="noopener noreferrer">
-            <button className="bg-in-cyan mt-12 text-black font-in-poppins text-lg leading-6 px-12 py-4 rounded-full mx-auto block hover:bg-in-cyan/80 transition-all duration-300 cursor-pointer">
-                Únete al club
-            </button>
-        </Link>
+        <button
+          onClick={() => triggerCTA(CLUB_HREF, "Únete al club - ClubBenefits")}
+          className="cta-club-custom bg-in-cyan mt-12 text-black font-in-poppins text-lg leading-6 px-12 py-4 rounded-full mx-auto block hover:bg-in-cyan/80 transition-all duration-300 cursor-pointer"
+        >
+          Únete al club
+        </button>
       </section>
     </div>
   );

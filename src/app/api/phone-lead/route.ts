@@ -1,13 +1,15 @@
 import { google } from "googleapis";
 import { NextRequest, NextResponse } from "next/server";
 
+const SHEET_NAME = "Leads CTA";
+
 // Colores corporativos INB2B
-const COLOR_HEADER_BG  = { red: 0.071, green: 0.122, blue: 0.235 };
-const COLOR_HEADER_FG  = { red: 0.000, green: 0.898, blue: 0.784 };
-const COLOR_ROW_ODD    = { red: 0.063, green: 0.153, blue: 0.310 };
-const COLOR_ROW_EVEN   = { red: 0.094, green: 0.188, blue: 0.361 };
-const COLOR_BORDER     = { red: 0.000, green: 0.898, blue: 0.784 };
-const COLOR_TEXT_LIGHT = { red: 0.85,  green: 0.92,  blue: 1.0   };
+const COLOR_HEADER_BG  = { red: 0.071, green: 0.122, blue: 0.235 }; // #122040 azul oscuro
+const COLOR_HEADER_FG  = { red: 0.000, green: 0.898, blue: 0.784 }; // #00E5C8 cyan
+const COLOR_ROW_ODD    = { red: 0.063, green: 0.153, blue: 0.310 }; // fila impar
+const COLOR_ROW_EVEN   = { red: 0.094, green: 0.188, blue: 0.361 }; // fila par (ligeramente más claro)
+const COLOR_BORDER     = { red: 0.000, green: 0.898, blue: 0.784 }; // cyan para bordes
+const COLOR_TEXT_LIGHT = { red: 0.85,  green: 0.92,  blue: 1.0   }; // texto blanco-azulado
 
 const borderStyle = {
   style: "SOLID",
@@ -17,18 +19,18 @@ const borderStyle = {
 
 export async function POST(req: NextRequest) {
   try {
-    const { nombre, apellido, empresa, telefono, mensaje } = await req.json();
+    const { telefono, pagina, cta } = await req.json();
+
+    if (!telefono) {
+      return NextResponse.json({ error: "Teléfono requerido" }, { status: 400 });
+    }
 
     const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
     const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n");
     const spreadsheetId = process.env.GOOGLE_SHEET_ID;
 
     if (!clientEmail || !privateKey || !spreadsheetId) {
-      console.error("Missing Google Sheets environment variables");
-      return NextResponse.json(
-        { error: "Error de configuración en el servidor" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Error de configuración" }, { status: 500 });
     }
 
     const auth = new google.auth.GoogleAuth({
@@ -38,24 +40,39 @@ export async function POST(req: NextRequest) {
 
     const sheets = google.sheets({ version: "v4", auth });
 
-    const date = new Date().toLocaleString("es-PE", { timeZone: "America/Lima" });
+    // Verificar si la hoja existe
+    const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId });
+    const sheetsList = spreadsheet.data.sheets ?? [];
+    const existingSheet = sheetsList.find((s) => s.properties?.title === SHEET_NAME);
+    const sheetExists = !!existingSheet;
+    let sheetId: number;
 
-    // Verificar si hay encabezados
-    const checkResponse = await sheets.spreadsheets.values.get({
-      spreadsheetId,
-      range: "'Hoja 1'!A1:F1",
-    });
+    if (!sheetExists) {
+      // Crear hoja con dimensiones definidas
+      const addSheet = await sheets.spreadsheets.batchUpdate({
+        spreadsheetId,
+        requestBody: {
+          requests: [
+            {
+              addSheet: {
+                properties: {
+                  title: SHEET_NAME,
+                  gridProperties: { rowCount: 1000, columnCount: 4 },
+                },
+              },
+            },
+          ],
+        },
+      });
+      sheetId = addSheet.data.replies?.[0]?.addSheet?.properties?.sheetId ?? 1;
 
-    const sheetId = 0;
-
-    if (!checkResponse.data.values || checkResponse.data.values.length === 0) {
       // Escribir encabezados
       await sheets.spreadsheets.values.update({
         spreadsheetId,
-        range: "'Hoja 1'!A1:F1",
+        range: `'${SHEET_NAME}'!A1:D1`,
         valueInputOption: "USER_ENTERED",
         requestBody: {
-          values: [["📅  Fecha y Hora", "👤  Nombre", "👤  Apellido", "🏢  Empresa", "📞  Teléfono", "💬  Mensaje"]],
+          values: [["📅  Fecha y Hora", "📞  Teléfono", "🌐  Página", "🎯  CTA Origen"]],
         },
       });
 
@@ -64,10 +81,10 @@ export async function POST(req: NextRequest) {
         spreadsheetId,
         requestBody: {
           requests: [
-            // Fondo general
+            // ── Fondo general de la hoja (azul oscuro base) ──────────────────
             {
               repeatCell: {
-                range: { sheetId, startRowIndex: 0, endRowIndex: 1000, startColumnIndex: 0, endColumnIndex: 6 },
+                range: { sheetId, startRowIndex: 0, endRowIndex: 1000, startColumnIndex: 0, endColumnIndex: 4 },
                 cell: {
                   userEnteredFormat: {
                     backgroundColor: COLOR_ROW_ODD,
@@ -79,24 +96,30 @@ export async function POST(req: NextRequest) {
                 fields: "userEnteredFormat(backgroundColor,textFormat,verticalAlignment,padding)",
               },
             },
-            // Encabezado
+            // ── Encabezado ───────────────────────────────────────────────────
             {
               repeatCell: {
-                range: { sheetId, startRowIndex: 0, endRowIndex: 1, startColumnIndex: 0, endColumnIndex: 6 },
+                range: { sheetId, startRowIndex: 0, endRowIndex: 1, startColumnIndex: 0, endColumnIndex: 4 },
                 cell: {
                   userEnteredFormat: {
                     backgroundColor: COLOR_HEADER_BG,
-                    textFormat: { bold: true, fontSize: 11, foregroundColor: COLOR_HEADER_FG },
+                    textFormat: {
+                      bold: true,
+                      fontSize: 11,
+                      foregroundColor: COLOR_HEADER_FG,
+                    },
                     horizontalAlignment: "CENTER",
                     verticalAlignment: "MIDDLE",
                     padding: { top: 10, bottom: 10, left: 12, right: 12 },
-                    borders: { bottom: { style: "SOLID", width: 2, color: COLOR_BORDER } },
+                    borders: {
+                      bottom: { style: "SOLID", width: 2, color: COLOR_BORDER },
+                    },
                   },
                 },
                 fields: "userEnteredFormat(backgroundColor,textFormat,horizontalAlignment,verticalAlignment,padding,borders)",
               },
             },
-            // Altura encabezado
+            // ── Fila de encabezado: altura ────────────────────────────────────
             {
               updateDimensionProperties: {
                 range: { sheetId, dimension: "ROWS", startIndex: 0, endIndex: 1 },
@@ -104,14 +127,17 @@ export async function POST(req: NextRequest) {
                 fields: "pixelSize",
               },
             },
-            // Freeze
+            // ── Freeze fila encabezado ────────────────────────────────────────
             {
               updateSheetProperties: {
-                properties: { sheetId, gridProperties: { frozenRowCount: 1 } },
+                properties: {
+                  sheetId,
+                  gridProperties: { frozenRowCount: 1 },
+                },
                 fields: "gridProperties.frozenRowCount",
               },
             },
-            // Anchos de columna
+            // ── Ancho de columnas ─────────────────────────────────────────────
             {
               updateDimensionProperties: {
                 range: { sheetId, dimension: "COLUMNS", startIndex: 0, endIndex: 1 },
@@ -121,28 +147,21 @@ export async function POST(req: NextRequest) {
             },
             {
               updateDimensionProperties: {
-                range: { sheetId, dimension: "COLUMNS", startIndex: 1, endIndex: 3 },
-                properties: { pixelSize: 140 },
+                range: { sheetId, dimension: "COLUMNS", startIndex: 1, endIndex: 2 },
+                properties: { pixelSize: 160 },
+                fields: "pixelSize",
+              },
+            },
+            {
+              updateDimensionProperties: {
+                range: { sheetId, dimension: "COLUMNS", startIndex: 2, endIndex: 3 },
+                properties: { pixelSize: 200 },
                 fields: "pixelSize",
               },
             },
             {
               updateDimensionProperties: {
                 range: { sheetId, dimension: "COLUMNS", startIndex: 3, endIndex: 4 },
-                properties: { pixelSize: 180 },
-                fields: "pixelSize",
-              },
-            },
-            {
-              updateDimensionProperties: {
-                range: { sheetId, dimension: "COLUMNS", startIndex: 4, endIndex: 5 },
-                properties: { pixelSize: 150 },
-                fields: "pixelSize",
-              },
-            },
-            {
-              updateDimensionProperties: {
-                range: { sheetId, dimension: "COLUMNS", startIndex: 5, endIndex: 6 },
                 properties: { pixelSize: 320 },
                 fields: "pixelSize",
               },
@@ -150,26 +169,30 @@ export async function POST(req: NextRequest) {
           ],
         },
       });
+    } else {
+      sheetId = existingSheet.properties?.sheetId ?? 1;
     }
 
-    // Obtener cantidad de filas para alternar color
+    const date = new Date().toLocaleString("es-PE", { timeZone: "America/Lima" });
+
+    // Obtener la fila actual para determinar si es par o impar
     const countRes = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: "'Hoja 1'!A:A",
+      range: `'${SHEET_NAME}'!A:A`,
     });
     const rowCount = countRes.data.values?.length ?? 1;
-    const newRowIndex = rowCount;
+    const newRowIndex = rowCount; // 0-based: fila 1 = encabezado, fila 2 = primer dato
     const isEven = newRowIndex % 2 === 0;
 
-    // Escribir datos
+    // Escribir la nueva fila
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: "'Hoja 1'!A:F",
+      range: `'${SHEET_NAME}'!A:D`,
       valueInputOption: "USER_ENTERED",
-      requestBody: { values: [[date, nombre, apellido, empresa, telefono, mensaje]] },
+      requestBody: { values: [[date, telefono, pagina ?? "", cta ?? ""]] },
     });
 
-    // Formatear la fila nueva
+    // Formatear la fila recién añadida
     await sheets.spreadsheets.batchUpdate({
       spreadsheetId,
       requestBody: {
@@ -181,7 +204,7 @@ export async function POST(req: NextRequest) {
                 startRowIndex: newRowIndex,
                 endRowIndex: newRowIndex + 1,
                 startColumnIndex: 0,
-                endColumnIndex: 6,
+                endColumnIndex: 4,
               },
               cell: {
                 userEnteredFormat: {
@@ -200,6 +223,7 @@ export async function POST(req: NextRequest) {
               fields: "userEnteredFormat(backgroundColor,textFormat,verticalAlignment,padding,borders)",
             },
           },
+          // Altura de fila de datos
           {
             updateDimensionProperties: {
               range: { sheetId, dimension: "ROWS", startIndex: newRowIndex, endIndex: newRowIndex + 1 },
@@ -213,10 +237,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error writing to Google Sheets:", error);
-    return NextResponse.json(
-      { error: "Ocurrió un error al guardar los datos" },
-      { status: 500 }
-    );
+    console.error("Error saving phone lead:", error);
+    return NextResponse.json({ error: "Error al guardar" }, { status: 500 });
   }
 }

@@ -10,6 +10,8 @@ import { sanityClient } from "@/lib/sanity.client";
 import { ACTIVE_POPUP } from "@/lib/queries";
 import { BlogPopup } from "@/types/blog";
 import { Popup } from "@/components/common/Popup";
+import { PhoneLeadProvider } from "@/context/PhoneLeadContext";
+import { PhoneLeadModal } from "@/components/common/PhoneLeadModal";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -166,14 +168,17 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} ${lato.variable} antialiased`}
         suppressHydrationWarning
       >
-        {children}
-        <AOSInit />
-        <Popup popup={popup} />
-        <WhatsAppButton 
-          phoneNumber="51943583887"
-          message="¡Hola! Vi su web y me gustaría obtener más información sobre INB2B"
-        />
-        <Footer />
+        <PhoneLeadProvider>
+          {children}
+          <AOSInit />
+          <Popup popup={popup} />
+          <WhatsAppButton
+            phoneNumber="51943583887"
+            message="¡Hola! Vi su web y me gustaría obtener más información sobre INB2B"
+          />
+          <PhoneLeadModal />
+          <Footer />
+        </PhoneLeadProvider>
 
         <Script
           id="ld-json-org"

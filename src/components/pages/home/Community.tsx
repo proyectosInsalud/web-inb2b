@@ -1,32 +1,34 @@
-import { Button } from "@/components/ui/button"
-import Image from "next/image"
-import Link from "next/link"
+"use client";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import { usePhoneLead } from "@/context/PhoneLeadContext";
+
+const CLUB_HREF = "https://chat.whatsapp.com/CDs3m8GxO4N5G9hgVO2kMo?mode=r_t";
 
 export const Community = () => {
+  const { triggerCTA } = usePhoneLead();
+
   return (
     <div className="relative bg-in-blue-main">
       <div className="relative ">
-          <Image 
-              src="/images/semi-ellipse.png" 
-              alt="Wave" 
-
-              width={900} 
-              height={100} 
+          <Image
+              src="/images/semi-ellipse.png"
+              alt="Wave"
+              width={900}
+              height={100}
               unoptimized
-              className="hidden md:block w-full absolute -mt-72" 
+              className="hidden md:block w-full absolute -mt-72"
             />
-            <Image 
-              src="/images/semi-ellipse-mobile.png" 
-              alt="Wave" 
-
-              width={500} 
-              height={100} 
+            <Image
+              src="/images/semi-ellipse-mobile.png"
+              alt="Wave"
+              width={500}
+              height={100}
               unoptimized
-              className="block md:hidden w-full absolute -mt-72" 
+              className="block md:hidden w-full absolute -mt-72"
             />
-
       </div>
-      <div               data-aos="fade-up" data-aos-duration="800" className=" relative z-10 max-w-7xl mx-auto px-4 container -translate-y-24 ">
+      <div data-aos="fade-up" data-aos-duration="800" className=" relative z-10 max-w-7xl mx-auto px-4 container -translate-y-24 ">
         <div className="space-y-8">
           <h2 className="text-white text-center text-2xl md:text-4xl font-in-avantgarde">
           Comunidad & <br /> Eventos Regionales
@@ -81,21 +83,21 @@ export const Community = () => {
                   </div>
                 </div>
 
-
               </div>
-              <Link className="cta-club-custom" href="https://chat.whatsapp.com/CDs3m8GxO4N5G9hgVO2kMo?mode=r_t" target="_blank" rel="noopener noreferrer">
-                  <Button className="bg-in-cyan cursor-pointer font-in-poppins hover:bg-in-cyan/80 rounded-full text-lg py-6 px-10 text-black">
-                  Unirme ahora
+              <Button
+                onClick={() => triggerCTA(CLUB_HREF, "Unirme ahora - Comunidad")}
+                className="cta-club-custom bg-in-cyan cursor-pointer font-in-poppins hover:bg-in-cyan/80 rounded-full text-lg py-6 px-10 text-black"
+              >
+                Unirme ahora
               </Button>
-                </Link>
-              
+
             </div>
             <div className="col-span-1 md:col-span-5 hidden md:block">
-              <Image  src="/images/comunidad-image.png" alt="Community" width={500} height={500} className="w-full h-full object-cover mx-auto" />
+              <Image src="/images/comunidad-image.png" alt="Community" width={500} height={500} className="w-full h-full object-cover mx-auto" />
             </div>
           </div>
         </section>
       </div>
     </div>
-  )
-}
+  );
+};

@@ -1,7 +1,13 @@
+"use client";
 import Image from "next/image";
-import Link from "next/link";
+import { usePhoneLead } from "@/context/PhoneLeadContext";
+
+const WSP_HREF =
+  "https://wa.me/51943583887?text=¡Hola!%20Quiero%20una%20asesoría%20para%20escalar%20mi%20centro%20de%20salud";
 
 export function BlogCTA() {
+  const { triggerCTA } = usePhoneLead();
+
   return (
     <section className="pt-16 md:pt-24 pb-28 md:pb-32">
       <div className="container max-w-4xl mx-auto px-4 relative">
@@ -46,14 +52,12 @@ export function BlogCTA() {
           <p className="text-white/50 font-in-poppins text-sm md:text-base mb-8 max-w-lg mx-auto">
             Más de 100 centros de salud confían en INB2B y ya crecieron sus centros.
           </p>
-          <Link
-            href="https://wa.me/51943583887?text=¡Hola!%20Quiero%20una%20asesoría%20para%20escalar%20mi%20centro%20de%20salud"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block border border-white/30 text-white px-8 py-3 rounded-full font-in-poppins text-sm hover:bg-white/10 transition-colors"
+          <button
+            onClick={() => triggerCTA(WSP_HREF, "Contactarme con un asesor - Blog")}
+            className="inline-block border border-white/30 text-white px-8 py-3 rounded-full font-in-poppins text-sm hover:bg-white/10 transition-colors cursor-pointer"
           >
             Contactarme con un asesor
-          </Link>
+          </button>
         </div>
       </div>
     </section>
