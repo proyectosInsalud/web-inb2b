@@ -3,10 +3,14 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePhoneLead } from "@/context/PhoneLeadContext";
+
+const WSP_BASE = "https://wa.me/51943583887";
 
 export const NavbarSolid = () => {
   const [isOpen, setIsOpen] = useState(false);
   const closeMenu = () => setIsOpen(false);
+  const { triggerCTA } = usePhoneLead();
 
   const linkClass = "transition hover:text-[#5DC5BE] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#5DC5BE] text-white text-sm whitespace-nowrap";
 
@@ -36,13 +40,12 @@ export const NavbarSolid = () => {
           <div className="hidden md:flex md:justify-end md:items-center gap-6">
             <Link href="/#inacademy" className={linkClass}>InAcademy</Link>
             <Link href="/#health-business-club" className="hidden xl:block transition hover:text-[#5DC5BE] text-white text-sm whitespace-nowrap">Health Business Club</Link>
-            <Link
-              className="bg-[#5DC5BE] text-black px-6 py-2 rounded-full text-sm transition-all duration-300 hover:bg-[#5DC5BE]/80 font-semibold"
-              href="https://wa.me/51943583887?text=Hola%20Vi%20su%20web%20y%20me%20gustaria%20obtener%20mas%20informacion%20sobre%20INB2B"
-              target="_blank" rel="noopener noreferrer"
+            <button
+              className="bg-[#5DC5BE] text-black px-6 py-2 rounded-full text-sm transition-all duration-300 hover:bg-[#5DC5BE]/80 font-semibold cursor-pointer"
+              onClick={() => triggerCTA(WSP_BASE, "Contáctanos - NavbarSolid")}
             >
               Contáctanos
-            </Link>
+            </button>
           </div>
 
           {/* Hamburger mobile */}
@@ -77,13 +80,12 @@ export const NavbarSolid = () => {
                 <Link href="/#inacademy" onClick={closeMenu} className="rounded-lg px-2 py-1 hover:bg-white/10 transition">InAcademy</Link>
                 <Link href="/#health-business-club" onClick={closeMenu} className="rounded-lg px-2 py-1 hover:bg-white/10 transition">Health Business Club</Link>
               </div>
-              <Link
-                className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-[#5DC5BE] px-6 py-2 text-center text-black font-semibold transition hover:bg-[#5DC5BE]/80"
-                href="https://wa.me/51943583887?text=Hola%20Vi%20su%20web%20y%20me%20gustaria%20obtener%20mas%20informacion%20sobre%20INB2B"
-                target="_blank" rel="noopener noreferrer" onClick={closeMenu}
+              <button
+                className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-[#5DC5BE] px-6 py-2 text-center text-black font-semibold transition hover:bg-[#5DC5BE]/80 cursor-pointer"
+                onClick={() => { closeMenu(); triggerCTA(WSP_BASE, "Contáctanos - NavbarSolid Mobile"); }}
               >
                 Contáctanos
-              </Link>
+              </button>
             </div>
           )}
         </nav>

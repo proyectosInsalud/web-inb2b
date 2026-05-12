@@ -13,14 +13,18 @@ import { formContactHomeSchema } from "@/schemas";
 import { FormContactHomeType } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-// import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { Loader2, CheckCircle2, XCircle, X } from "lucide-react";
 
-const WHATSAPP_NUMBER = "51943583887"; // Reemplaza con tu número de WhatsApp
+const WHATSAPP_NUMBER = "51943583887";
+
+type Status = "idle" | "loading" | "success" | "error";
 
 export const FormContactHome = () => {
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<Status>("idle");
+  const [wspUrl, setWspUrl] = useState("");
+
   const form = useForm<FormContactHomeType>({
     resolver: zodResolver(formContactHomeSchema),
     defaultValues: {
@@ -33,52 +37,96 @@ export const FormContactHome = () => {
   });
 
   async function onSubmit(data: FormContactHomeType) {
-    setLoading(true);
+    setStatus("loading");
     try {
-      // Guardar en Google Sheets
-      await fetch("/api/contact", {
+      const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
-      // Persistir teléfono para no volver a pedirlo en CTAs
+      if (!res.ok) throw new Error("API error");
+
+      // Registrar también en Leads CTA
+      fetch("/api/phone-lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          telefono: data.telefono,
+          nombre: data.nombre,
+          pagina: "/",
+          cta: "Formulario de contacto",
+        }),
+      }).catch(() => {});
+
       try {
         localStorage.setItem(
           "inb2b_phone_lead",
-          JSON.stringify({ phone: data.telefono, capturedAt: new Date().toISOString() })
+          JSON.stringify({
+            phone: data.telefono,
+            nombre: data.nombre,
+            capturedAt: new Date().toISOString(),
+          })
         );
-      } catch {
-        // ignorar si localStorage no está disponible
-      }
+      } catch { /* ignorar */ }
 
-      // Evento de Tag Manager antes de abrir WhatsApp
       if (typeof window !== "undefined") {
         window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: "formSubmissionWsp",
-        });
+        window.dataLayer.push({ event: "formSubmissionWsp" });
       }
 
       const message = encodeURIComponent(
-        `¡Hola! Mi nombre es ${data.nombre} ${data.apellido}.\n\n${
-          data.empresa ? `Represento a la empresa: ${data.empresa}\n` : ""
-        }Teléfono de contacto: ${data.telefono}\n\nMensaje: ${data.mensaje}`
+        `¡Hola! Vengo de la web inb2blatam.com.\nMi nombre es ${data.nombre} ${data.apellido}.\n${
+          data.empresa ? `Empresa: ${data.empresa}\n` : ""
+        }Teléfono: ${data.telefono}\n\n${data.mensaje}`
       );
 
-      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
-      window.open(whatsappUrl, "_blank");
-    } catch (error) {
-      console.error("Error al enviar el formulario:", error);
-    } finally {
-      setLoading(false);
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+      window.open(url, "_blank");
+      setStatus("success");
+      form.reset();
+      setTimeout(() => setStatus("idle"), 4000);
+    } catch {
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 5000);
     }
   }
-  
+
+  const handleCloseModal = () => setStatus("idle");
+
   return (
     <div id="contactanos">
+      {/* ── Toast de resultado ─────────────────────────────── */}
+      {(status === "success" || status === "error") && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div className={`flex items-center gap-3 px-5 py-4 rounded-2xl shadow-2xl border text-sm font-in-poppins ${
+            status === "success"
+              ? "bg-[#0d1f3c] border-in-cyan/30 text-white"
+              : "bg-[#1f0d0d] border-red-500/30 text-white"
+          }`}>
+            {status === "success" ? (
+              <CheckCircle2 className="text-in-cyan w-5 h-5 shrink-0" />
+            ) : (
+              <XCircle className="text-red-400 w-5 h-5 shrink-0" />
+            )}
+            <span>
+              {status === "success"
+                ? "¡Enviado! Abriendo WhatsApp…"
+                : "Algo salió mal. Intenta de nuevo."}
+            </span>
+            <button onClick={handleCloseModal} className="ml-2 text-white/40 hover:text-white transition-colors">
+              <X size={16} />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Formulario ─────────────────────────────────────── */}
       <Form {...form}>
-        <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+        <form className="space-y-4 relative" onSubmit={form.handleSubmit(onSubmit)}>
+          {status === "loading" && (
+            <div className="absolute inset-0 z-10 cursor-not-allowed rounded-lg" />
+          )}
           <div className="flex flex-col md:flex-row gap-4">
             <FormField
               control={form.control}
@@ -188,31 +236,35 @@ export const FormContactHome = () => {
             control={form.control}
             name="aceptaTerminos"
             render={({ field }) => (
-            <FormItem className="space-y-1">
-                  <div className="flex items-start gap-2">
-                    <FormControl>
-                      <Checkbox
-                        checked={!!field.value}
-                        onCheckedChange={(v: boolean) => field.onChange(v === true)}
-                        className="border-white data-[state=checked]:bg-white data-[state=checked]:text-black"
-                      />
-                    </FormControl>
-
-                    <Label className="font-normal text-xs text-white leading-4">
-                      Autorizo el tratamiento de mis datos personales con fines informativos y comerciales
-                    </Label>
-                  </div>
-
-                  <FormMessage />
-                </FormItem>
+              <FormItem className="space-y-1">
+                <div className="flex items-start gap-2">
+                  <FormControl>
+                    <Checkbox
+                      checked={!!field.value}
+                      onCheckedChange={(v: boolean) => field.onChange(v === true)}
+                      className="border-white data-[state=checked]:bg-white data-[state=checked]:text-black"
+                    />
+                  </FormControl>
+                  <Label className="font-normal text-xs text-white leading-4">
+                    Autorizo el tratamiento de mis datos personales con fines informativos y comerciales
+                  </Label>
+                </div>
+                <FormMessage />
+              </FormItem>
             )}
           />
           <Button
-            className="w-full bg-in-cyan text-black hover:bg-in-cyan/80 cursor-pointer font-in-poppins"
+            className="w-full bg-in-cyan text-black hover:bg-in-cyan/80 cursor-pointer font-in-poppins disabled:opacity-70"
             type="submit"
-            disabled={loading}
           >
-            {loading ? "Enviando..." : "Enviar"}
+            {status === "loading" ? (
+              <span className="flex items-center justify-center gap-2">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Enviando...
+              </span>
+            ) : (
+              "Enviar"
+            )}
           </Button>
         </form>
       </Form>

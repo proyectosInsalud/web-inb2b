@@ -3,9 +3,13 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePhoneLead } from "@/context/PhoneLeadContext";
+
+const WSP_BASE = "https://wa.me/51943583887";
 
 export const HeroNav = ({ isStatic = false }: { isStatic?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { triggerCTA } = usePhoneLead();
 
   const closeMenu = () => setIsOpen(false);
 
@@ -64,14 +68,12 @@ export const HeroNav = ({ isStatic = false }: { isStatic?: boolean }) => {
             >
               Health Business Club
             </Link>
-            <Link
-              className="cta-wsp-custom bg-in-cyan text-black px-6 md:px-7 lg:px-8 py-2 rounded-full text-sm md:text-base transition-all duration-300 hover:bg-in-cyan/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-in-cyan"
-              href="https://wa.me/51943583887?text=Hola%20Vi%20su%20web%20y%20me%20gustaria%20obtener%20mas%20informacion%20sobre%20INB2B"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              className="cta-wsp-custom bg-in-cyan text-black px-6 md:px-7 lg:px-8 py-2 rounded-full text-sm md:text-base transition-all duration-300 hover:bg-in-cyan/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-in-cyan cursor-pointer"
+              onClick={() => triggerCTA(WSP_BASE, "Contáctanos - Navbar")}
             >
               Contáctanos
-            </Link>
+            </button>
           </div>
 
           <button
@@ -149,15 +151,12 @@ export const HeroNav = ({ isStatic = false }: { isStatic?: boolean }) => {
                   Health Business Club
                 </Link>
               </div>
-              <Link
-                className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-in-cyan px-6 py-2 text-center text-black transition hover:bg-in-cyan/80 active:bg-in-cyan/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/60"
-                href="https://wa.me/51943583887?text=Hola%20Vi%20su%20web%20y%20me%20gustaria%20obtener%20mas%20informacion%20sobre%20INB2B"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={closeMenu}
+              <button
+                className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-in-cyan px-6 py-2 text-center text-black transition hover:bg-in-cyan/80 active:bg-in-cyan/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/60 cursor-pointer"
+                onClick={() => { closeMenu(); triggerCTA(WSP_BASE, "Contáctanos - Navbar Mobile"); }}
               >
                 Contáctanos
-              </Link>
+              </button>
             </div>
           )}
         </nav>

@@ -1,5 +1,6 @@
 import { google } from "googleapis";
 import { NextRequest, NextResponse } from "next/server";
+import nodemailer from "nodemailer";
 
 // Colores corporativos INB2B
 const COLOR_HEADER_BG  = { red: 0.071, green: 0.122, blue: 0.235 };
@@ -40,19 +41,24 @@ export async function POST(req: NextRequest) {
 
     const date = new Date().toLocaleString("es-PE", { timeZone: "America/Lima" });
 
+    // Obtener nombre real de la primera hoja
+    const spreadsheetMeta = await sheets.spreadsheets.get({ spreadsheetId });
+    const firstSheet = spreadsheetMeta.data.sheets?.[0];
+    const sheetTitle = firstSheet?.properties?.title ?? "Hoja 1";
+    const sheetId = firstSheet?.properties?.sheetId ?? 0;
+    const range = (r: string) => `'${sheetTitle}'!${r}`;
+
     // Verificar si hay encabezados
     const checkResponse = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: "'Hoja 1'!A1:F1",
+      range: range("A1:F1"),
     });
-
-    const sheetId = 0;
 
     if (!checkResponse.data.values || checkResponse.data.values.length === 0) {
       // Escribir encabezados
       await sheets.spreadsheets.values.update({
         spreadsheetId,
-        range: "'Hoja 1'!A1:F1",
+        range: range("A1:F1"),
         valueInputOption: "USER_ENTERED",
         requestBody: {
           values: [["📅  Fecha y Hora", "👤  Nombre", "👤  Apellido", "🏢  Empresa", "📞  Teléfono", "💬  Mensaje"]],
@@ -155,7 +161,7 @@ export async function POST(req: NextRequest) {
     // Obtener cantidad de filas para alternar color
     const countRes = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: "'Hoja 1'!A:A",
+      range: range("A:A"),
     });
     const rowCount = countRes.data.values?.length ?? 1;
     const newRowIndex = rowCount;
@@ -164,8 +170,8 @@ export async function POST(req: NextRequest) {
     // Escribir datos
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: "'Hoja 1'!A:F",
-      valueInputOption: "USER_ENTERED",
+      range: range("A:F"),
+      valueInputOption: "RAW",
       requestBody: { values: [[date, nombre, apellido, empresa, telefono, mensaje]] },
     });
 
@@ -210,6 +216,78 @@ export async function POST(req: NextRequest) {
         ],
       },
     });
+
+    // Enviar correo de notificación (no bloquea si falla)
+    try {
+      const smtpPort = Number(process.env.SMTP_PORT) || 465;
+      const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST || "mail.inb2blatam.com",
+        port: smtpPort,
+        secure: smtpPort === 465,
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
+        },
+        tls: { rejectUnauthorized: false },
+      });
+
+      const destinatario = process.env.CONTACT_DESTINATION_EMAIL || process.env.SMTP_USER || "";
+
+      await transporter.sendMail({
+        from: `"INB2B Web" <${process.env.SMTP_USER}>`,
+        to: destinatario,
+        subject: `📬 Nuevo contacto web — ${nombre} ${apellido}`,
+        html: `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    body { font-family: Arial, sans-serif; color: #333; margin: 0; padding: 0; background: #f5f5f5; }
+    .wrapper { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden; }
+    .header { background: #004469; padding: 28px 32px; text-align: center; }
+    .header h1 { color: #fff; margin: 0; font-size: 20px; letter-spacing: 0.5px; }
+    .header p { color: #5DC5BE; margin: 6px 0 0; font-size: 13px; }
+    .body { padding: 28px 32px; }
+    .field { margin-bottom: 18px; }
+    .field label { display: block; font-size: 11px; font-weight: bold; color: #5DC5BE; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .field span { font-size: 15px; color: #111; }
+    .divider { border: none; border-top: 1px solid #eee; margin: 20px 0; }
+    .message-box { background: #f9f9f9; border-left: 3px solid #5DC5BE; padding: 14px 16px; border-radius: 4px; font-size: 14px; color: #333; white-space: pre-wrap; }
+    .footer { background: #f0f0f0; text-align: center; padding: 14px; font-size: 11px; color: #999; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <h1>Nuevo contacto desde la web</h1>
+      <p>inb2blatam.com · ${date}</p>
+    </div>
+    <div class="body">
+      <div class="field">
+        <label>Nombre completo</label>
+        <span>${nombre} ${apellido}</span>
+      </div>
+      ${empresa ? `<div class="field"><label>Empresa</label><span>${empresa}</span></div>` : ""}
+      <div class="field">
+        <label>Teléfono</label>
+        <span>${telefono}</span>
+      </div>
+      <hr class="divider" />
+      <div class="field">
+        <label>Mensaje</label>
+        <div class="message-box">${mensaje}</div>
+      </div>
+    </div>
+    <div class="footer">INB2B · inb2blatam.com</div>
+  </div>
+</body>
+</html>`,
+      });
+    } catch (emailError) {
+      console.error("Error enviando email de contacto:", emailError);
+      // No falla la respuesta si el email falla
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

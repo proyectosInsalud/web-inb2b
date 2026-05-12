@@ -19,7 +19,7 @@ const borderStyle = {
 
 export async function POST(req: NextRequest) {
   try {
-    const { telefono, pagina, cta } = await req.json();
+    const { telefono, nombre, pagina, cta } = await req.json();
 
     if (!telefono) {
       return NextResponse.json({ error: "Teléfono requerido" }, { status: 400 });
@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
               addSheet: {
                 properties: {
                   title: SHEET_NAME,
-                  gridProperties: { rowCount: 1000, columnCount: 4 },
+                  gridProperties: { rowCount: 1000, columnCount: 5 },
                 },
               },
             },
@@ -69,10 +69,10 @@ export async function POST(req: NextRequest) {
       // Escribir encabezados
       await sheets.spreadsheets.values.update({
         spreadsheetId,
-        range: `'${SHEET_NAME}'!A1:D1`,
+        range: `'${SHEET_NAME}'!A1:E1`,
         valueInputOption: "USER_ENTERED",
         requestBody: {
-          values: [["📅  Fecha y Hora", "📞  Teléfono", "🌐  Página", "🎯  CTA Origen"]],
+          values: [["📅  Fecha y Hora", "👤  Nombre", "📞  Teléfono", "🌐  Página", "🎯  CTA Origen"]],
         },
       });
 
@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
             // ── Fondo general de la hoja (azul oscuro base) ──────────────────
             {
               repeatCell: {
-                range: { sheetId, startRowIndex: 0, endRowIndex: 1000, startColumnIndex: 0, endColumnIndex: 4 },
+                range: { sheetId, startRowIndex: 0, endRowIndex: 1000, startColumnIndex: 0, endColumnIndex: 5 },
                 cell: {
                   userEnteredFormat: {
                     backgroundColor: COLOR_ROW_ODD,
@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
             // ── Encabezado ───────────────────────────────────────────────────
             {
               repeatCell: {
-                range: { sheetId, startRowIndex: 0, endRowIndex: 1, startColumnIndex: 0, endColumnIndex: 4 },
+                range: { sheetId, startRowIndex: 0, endRowIndex: 1, startColumnIndex: 0, endColumnIndex: 5 },
                 cell: {
                   userEnteredFormat: {
                     backgroundColor: COLOR_HEADER_BG,
@@ -148,21 +148,28 @@ export async function POST(req: NextRequest) {
             {
               updateDimensionProperties: {
                 range: { sheetId, dimension: "COLUMNS", startIndex: 1, endIndex: 2 },
-                properties: { pixelSize: 160 },
+                properties: { pixelSize: 180 },
                 fields: "pixelSize",
               },
             },
             {
               updateDimensionProperties: {
                 range: { sheetId, dimension: "COLUMNS", startIndex: 2, endIndex: 3 },
-                properties: { pixelSize: 200 },
+                properties: { pixelSize: 160 },
                 fields: "pixelSize",
               },
             },
             {
               updateDimensionProperties: {
                 range: { sheetId, dimension: "COLUMNS", startIndex: 3, endIndex: 4 },
-                properties: { pixelSize: 320 },
+                properties: { pixelSize: 200 },
+                fields: "pixelSize",
+              },
+            },
+            {
+              updateDimensionProperties: {
+                range: { sheetId, dimension: "COLUMNS", startIndex: 4, endIndex: 5 },
+                properties: { pixelSize: 280 },
                 fields: "pixelSize",
               },
             },
@@ -187,9 +194,9 @@ export async function POST(req: NextRequest) {
     // Escribir la nueva fila
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: `'${SHEET_NAME}'!A:D`,
-      valueInputOption: "USER_ENTERED",
-      requestBody: { values: [[date, telefono, pagina ?? "", cta ?? ""]] },
+      range: `'${SHEET_NAME}'!A:E`,
+      valueInputOption: "RAW",
+      requestBody: { values: [[date, nombre ?? "", telefono, pagina ?? "", cta ?? ""]] },
     });
 
     // Formatear la fila recién añadida
@@ -204,7 +211,7 @@ export async function POST(req: NextRequest) {
                 startRowIndex: newRowIndex,
                 endRowIndex: newRowIndex + 1,
                 startColumnIndex: 0,
-                endColumnIndex: 4,
+                endColumnIndex: 5,
               },
               cell: {
                 userEnteredFormat: {
