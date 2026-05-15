@@ -146,7 +146,7 @@ export const GridServices = ({ serviceId }: GridServicesProps) => {
                     <button
                       onClick={() =>
                         triggerCTA(
-                          `https://wa.me/51943583887?text=${encodeURIComponent(`¡Hola! Me interesa el servicio de "${item.title}" y quisiera agendar una consultoría.`)}`,
+                          `https://wa.me/51943366635?text=${encodeURIComponent(`¡Hola! Me interesa el servicio de "${item.title}" y quisiera agendar una consultoría.`)}`,
                           `Agenda tu consultoría - ${item.title}`
                         )
                       }

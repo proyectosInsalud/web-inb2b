@@ -8,8 +8,8 @@ type WhatsAppButtonProps = {
 };
 
 export const WhatsAppButton: FC<WhatsAppButtonProps> = ({
-  phoneNumber = "51943583887",
-  message = "¡Hola! Vi su web y me gustaría obtener más información sobre INB2B",
+  phoneNumber = "51943366635",
+  message = "¡Hola! Vi su página web. Deseo más informacion sobre cómo categorizar mi negocio",
 }) => {
   const { triggerCTA } = usePhoneLead();
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;

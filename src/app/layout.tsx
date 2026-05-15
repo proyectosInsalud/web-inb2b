@@ -173,8 +173,8 @@ export default async function RootLayout({
           <AOSInit />
           <Popup popup={popup} />
           <WhatsAppButton
-            phoneNumber="51943583887"
-            message="¡Hola! Vi su web y me gustaría obtener más información sobre INB2B"
+            phoneNumber="51943366635"
+            message="¡Hola! Vi su página web. Deseo más informacion sobre cómo categorizar mi negocio"
           />
           <PhoneLeadModal />
           <Footer />
@@ -196,7 +196,7 @@ export default async function RootLayout({
                 contactPoint: [
                   {
                     "@type": "ContactPoint",
-                    telephone: "+51 943 583 887",
+                    telephone: "+51 943 366 635",
                     contactType: "customer service",
                     areaServed: "LATAM",
                     availableLanguage: ["es"],

@@ -33,7 +33,7 @@ export const Footer = () => {
                         <p className="pb-4 text-in-gray-text">Contacto</p>
                         <div className="flex flex-col gap-2 text-white text-sm">
                             <p>comercial@inb2blatam.com</p>
-                            <p>+51 943 583 887</p>
+                            <p>+51 943 366 635</p>
 
                         </div>
                     </div>
