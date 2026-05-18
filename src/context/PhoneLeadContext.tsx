@@ -19,7 +19,9 @@ interface PhoneLeadData {
 
 interface PhoneLeadContextType {
   triggerCTA: (href: string, ctaLabel: string) => void;
+  triggerCTAAlways: (href: string, ctaLabel: string) => void;
   isModalOpen: boolean;
+  forceCapture: boolean;
   closeModal: () => void;
   submitLead: (phone: string, nombre: string) => Promise<void>;
   pendingCTA: { href: string; label: string } | null;
@@ -38,6 +40,7 @@ export function PhoneLeadProvider({ children }: { children: ReactNode }) {
   const [savedPhone, setSavedPhone] = useState<string | null>(null);
   const [savedNombre, setSavedNombre] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [forceCapture, setForceCapture] = useState(false);
   const [pendingCTA, setPendingCTA] = useState<{
     href: string;
     label: string;
@@ -82,8 +85,18 @@ export function PhoneLeadProvider({ children }: { children: ReactNode }) {
     [savedPhone, savedNombre, pathname]
   );
 
+  const triggerCTAAlways = useCallback(
+    (href: string, ctaLabel: string) => {
+      setPendingCTA({ href, label: ctaLabel });
+      setForceCapture(true);
+      setIsModalOpen(true);
+    },
+    []
+  );
+
   const closeModal = useCallback(() => {
     setIsModalOpen(false);
+    setForceCapture(false);
     setPendingCTA(null);
   }, []);
 
@@ -116,7 +129,7 @@ export function PhoneLeadProvider({ children }: { children: ReactNode }) {
 
   return (
     <PhoneLeadContext.Provider
-      value={{ triggerCTA, isModalOpen, closeModal, submitLead, pendingCTA }}
+      value={{ triggerCTA, triggerCTAAlways, isModalOpen, forceCapture, closeModal, submitLead, pendingCTA }}
     >
       {children}
     </PhoneLeadContext.Provider>

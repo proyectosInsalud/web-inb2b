@@ -5,6 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { BlogPopup } from "@/types/blog";
 import { X } from "lucide-react";
+import { usePhoneLead } from "@/context/PhoneLeadContext";
 
 interface PopupProps {
   popup: BlogPopup | null;
@@ -13,6 +14,7 @@ interface PopupProps {
 export function Popup({ popup }: PopupProps) {
   const [isVisible, setIsVisible] = useState(false);
   const pathname = usePathname();
+  const { triggerCTAAlways } = usePhoneLead();
 
   useEffect(() => {
     if (!popup || !popup.active) return;
@@ -49,11 +51,9 @@ export function Popup({ popup }: PopupProps) {
           </button>
           
           {popup.link ? (
-            <a 
-              href={popup.link} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="block cursor-pointer hover:opacity-95 transition-opacity"
+            <button
+              onClick={() => { handleClose(); triggerCTAAlways(popup.link!, "Popup"); }}
+              className="block w-full cursor-pointer hover:opacity-95 transition-opacity"
             >
               <Image
                 src={popup.imageUrl}
@@ -63,7 +63,7 @@ export function Popup({ popup }: PopupProps) {
                 className="w-full h-auto object-contain max-h-[85vh] block"
                 priority
               />
-            </a>
+            </button>
           ) : (
             <Image
               src={popup.imageUrl}

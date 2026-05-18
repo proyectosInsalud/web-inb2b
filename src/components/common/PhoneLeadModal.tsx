@@ -4,7 +4,7 @@ import { usePhoneLead } from "@/context/PhoneLeadContext";
 import { X } from "lucide-react";
 
 export function PhoneLeadModal() {
-  const { isModalOpen, closeModal, submitLead } = usePhoneLead();
+  const { isModalOpen, forceCapture, closeModal, submitLead } = usePhoneLead();
   const [nombre, setNombre] = useState("");
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
@@ -73,7 +73,7 @@ export function PhoneLeadModal() {
   return (
     <div
       className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
-      onClick={closeModal}
+      onClick={forceCapture ? undefined : closeModal}
     >
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
 
@@ -81,13 +81,15 @@ export function PhoneLeadModal() {
         className="relative bg-[#0d1f3c] border border-white/10 rounded-3xl p-8 w-full max-w-sm shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <button
-          onClick={closeModal}
-          className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors"
-          aria-label="Cerrar"
-        >
-          <X size={20} />
-        </button>
+        {!forceCapture && (
+          <button
+            onClick={closeModal}
+            className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors"
+            aria-label="Cerrar"
+          >
+            <X size={20} />
+          </button>
+        )}
 
         <div className="text-center mb-6">
           <p className="text-in-cyan text-sm font-in-poppins font-semibold uppercase tracking-widest mb-2">
@@ -156,13 +158,15 @@ export function PhoneLeadModal() {
             {loading ? "Guardando..." : "Continuar a WhatsApp"}
           </button>
 
-          <button
-            type="button"
-            onClick={closeModal}
-            className="w-full text-white/30 text-xs font-in-poppins hover:text-white/60 transition-colors py-1"
-          >
-            Omitir por ahora
-          </button>
+          {!forceCapture && (
+            <button
+              type="button"
+              onClick={closeModal}
+              className="w-full text-white/30 text-xs font-in-poppins hover:text-white/60 transition-colors py-1"
+            >
+              Omitir por ahora
+            </button>
+          )}
         </form>
       </div>
     </div>
