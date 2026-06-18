@@ -31,6 +31,12 @@ export const HeroNav = ({ isStatic = false }: { isStatic?: boolean }) => {
               Servicios
             </Link>
             <Link
+              href="/ipress"
+              className="inline-flex items-center gap-2 group transition hover:text-in-cyan focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-in-cyan"
+            >
+              <span>IPRESS</span>
+            </Link>
+                        <Link
               href="/blog"
               className="inline-flex items-center gap-2 group transition hover:text-in-cyan focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-in-cyan"
             >

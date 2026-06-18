@@ -38,6 +38,7 @@ export const NavbarSolid = () => {
 
           {/* Links derecha */}
           <div className="hidden md:flex md:justify-end md:items-center gap-6">
+            <Link href="/ipress" className={linkClass}>IPRESS</Link>
             <Link href="/#inacademy" className={linkClass}>InAcademy</Link>
             <Link href="/#health-business-club" className="hidden xl:block transition hover:text-[#5DC5BE] text-white text-sm whitespace-nowrap">Health Business Club</Link>
             <button
@@ -77,6 +78,7 @@ export const NavbarSolid = () => {
                   <span>Blog</span>
                   <span className="px-2 py-[2px] text-[10px] uppercase tracking-[0.08em] rounded-full border border-[#5DC5BE]/40 bg-[#5DC5BE]/15 text-[#5DC5BE]">Nuevo!</span>
                 </Link>
+                <Link href="/ipress" onClick={closeMenu} className="rounded-lg px-2 py-1 hover:bg-white/10 transition">IPRESS</Link>
                 <Link href="/#inacademy" onClick={closeMenu} className="rounded-lg px-2 py-1 hover:bg-white/10 transition">InAcademy</Link>
                 <Link href="/#health-business-club" onClick={closeMenu} className="rounded-lg px-2 py-1 hover:bg-white/10 transition">Health Business Club</Link>
               </div>
