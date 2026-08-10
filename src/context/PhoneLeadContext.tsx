@@ -76,6 +76,12 @@ export function PhoneLeadProvider({ children }: { children: ReactNode }) {
             cta: ctaLabel,
           }),
         }).catch(() => {});
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "whatsappClick",
+          cta: ctaLabel,
+          pagina: pathname,
+        });
         openURL(buildPersonalizedUrl(href, savedNombre, savedPhone));
         return;
       }
@@ -87,11 +93,17 @@ export function PhoneLeadProvider({ children }: { children: ReactNode }) {
 
   const triggerCTAAlways = useCallback(
     (href: string, ctaLabel: string) => {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "leadModalOpened",
+        cta: ctaLabel,
+        pagina: pathname,
+      });
       setPendingCTA({ href, label: ctaLabel });
       setForceCapture(true);
       setIsModalOpen(true);
     },
-    []
+    [pathname]
   );
 
   const closeModal = useCallback(() => {
@@ -117,6 +129,13 @@ export function PhoneLeadProvider({ children }: { children: ReactNode }) {
           cta: pendingCTA?.label ?? "",
         }),
       }).catch(() => {});
+
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "phoneLeadCapture",
+        cta: pendingCTA?.label ?? "",
+        pagina: pathname,
+      });
 
       setIsModalOpen(false);
       if (pendingCTA) {
