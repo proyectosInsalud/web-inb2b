@@ -5,7 +5,12 @@
       "Bash(xargs grep *)",
       "Bash(grep -E \".ts$\")",
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\user\\\\Desktop\\\\Fabricio\\\\web-inb2b\" -Force)",
-      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\user\\\\Desktop\\\\Fabricio\\\\web-inb2b\\\\src\\\\app\" -Recurse -Force | Where-Object { $_.Extension -eq \".tsx\" -or $_.PSIsContainer } | Select-Object FullName)"
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\user\\\\Desktop\\\\Fabricio\\\\web-inb2b\\\\src\\\\app\" -Recurse -Force | Where-Object { $_.Extension -eq \".tsx\" -or $_.PSIsContainer } | Select-Object FullName)",
+      "Bash(npx tsc *)",
+      "Bash(git config *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }
