@@ -15,7 +15,11 @@
       "mcp__claude-in-chrome__tabs_context_mcp",
       "mcp__claude-in-chrome__browser_batch",
       "mcp__claude-in-chrome__computer",
-      "mcp__claude-in-chrome__navigate"
+      "mcp__claude-in-chrome__navigate",
+      "mcp__visualize__read_me",
+      "mcp__visualize__show_widget",
+      "mcp__claude-in-chrome__tabs_create_mcp",
+      "mcp__claude-in-chrome__read_page"
     ]
   }
 }
