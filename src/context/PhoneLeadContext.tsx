@@ -12,6 +12,7 @@ import { usePathname } from "next/navigation";
 const STORAGE_KEY = "inb2b_phone_lead";
 const GCLID_STORAGE_KEY = "inb2b_gclid";
 const CAMPANA_STORAGE_KEY = "inb2b_campana";
+const GAD_CAMPAIGNID_STORAGE_KEY = "inb2b_gad_campaignid";
 
 interface PhoneLeadData {
   phone: string;
@@ -43,6 +44,7 @@ export function PhoneLeadProvider({ children }: { children: ReactNode }) {
   const [savedNombre, setSavedNombre] = useState<string | null>(null);
   const [gclid, setGclid] = useState<string | null>(null);
   const [campana, setCampana] = useState<string | null>(null);
+  const [gadCampaignId, setGadCampaignId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [forceCapture, setForceCapture] = useState(false);
   const [pendingCTA, setPendingCTA] = useState<{
@@ -105,6 +107,27 @@ export function PhoneLeadProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const urlGadCampaignId = params.get("gad_campaignid");
+      if (urlGadCampaignId) {
+        localStorage.setItem(
+          GAD_CAMPAIGNID_STORAGE_KEY,
+          JSON.stringify({ gadCampaignId: urlGadCampaignId, capturedAt: new Date().toISOString() })
+        );
+        setGadCampaignId(urlGadCampaignId);
+        return;
+      }
+      const raw = localStorage.getItem(GAD_CAMPAIGNID_STORAGE_KEY);
+      if (raw) {
+        setGadCampaignId(JSON.parse(raw).gadCampaignId ?? null);
+      }
+    } catch {
+      // ignorar errores de parse
+    }
+  }, []);
+
   const openURL = (href: string) => {
     window.open(href, "_blank", "noopener,noreferrer");
   };
@@ -122,6 +145,7 @@ export function PhoneLeadProvider({ children }: { children: ReactNode }) {
             cta: ctaLabel,
             gclid: gclid ?? "",
             campana: campana ?? "",
+            gadCampaignId: gadCampaignId ?? "",
           }),
         }).catch(() => {});
         window.dataLayer = window.dataLayer || [];
@@ -136,7 +160,7 @@ export function PhoneLeadProvider({ children }: { children: ReactNode }) {
       setPendingCTA({ href, label: ctaLabel });
       setIsModalOpen(true);
     },
-    [savedPhone, savedNombre, pathname, gclid, campana]
+    [savedPhone, savedNombre, pathname, gclid, campana, gadCampaignId]
   );
 
   const triggerCTAAlways = useCallback(
@@ -177,6 +201,7 @@ export function PhoneLeadProvider({ children }: { children: ReactNode }) {
           cta: pendingCTA?.label ?? "",
           gclid: gclid ?? "",
           campana: campana ?? "",
+          gadCampaignId: gadCampaignId ?? "",
         }),
       }).catch(() => {});
 
@@ -193,7 +218,7 @@ export function PhoneLeadProvider({ children }: { children: ReactNode }) {
         setPendingCTA(null);
       }
     },
-    [pathname, pendingCTA, gclid, campana]
+    [pathname, pendingCTA, gclid, campana, gadCampaignId]
   );
 
   return (

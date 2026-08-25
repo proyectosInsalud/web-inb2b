@@ -41,6 +41,16 @@ function getStoredCampana(): string {
   return "";
 }
 
+function getStoredGadCampaignId(): string {
+  try {
+    const raw = localStorage.getItem("inb2b_gad_campaignid");
+    if (raw) return JSON.parse(raw).gadCampaignId ?? "";
+  } catch {
+    // ignorar errores de parse
+  }
+  return "";
+}
+
 export const FormContactHome = () => {
   const [status, setStatus] = useState<Status>("idle");
   const [wspUrl, setWspUrl] = useState("");
@@ -78,6 +88,7 @@ export const FormContactHome = () => {
           cta: "Formulario de contacto",
           gclid: getStoredGclid(),
           campana: getStoredCampana(),
+          gadCampaignId: getStoredGadCampaignId(),
         }),
       }).catch(() => {});
 
