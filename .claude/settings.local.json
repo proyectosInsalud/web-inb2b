@@ -29,7 +29,9 @@
       "Bash(node scratch-fix-formula.mjs)",
       "Bash(node scratch-final-check.mjs)",
       "Bash(node scratch-cleanup-final.mjs)",
-      "Bash(git fetch *)"
+      "Bash(git fetch *)",
+      "Bash(node scratch-check-leadsads.mjs)",
+      "Bash(node scratch-fix-leadsads-formula.mjs)"
     ]
   }
 }
