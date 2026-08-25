@@ -21,6 +21,16 @@ const WHATSAPP_NUMBER = "51943366635";
 
 type Status = "idle" | "loading" | "success" | "error";
 
+function getStoredGclid(): string {
+  try {
+    const raw = localStorage.getItem("inb2b_gclid");
+    if (raw) return JSON.parse(raw).gclid ?? "";
+  } catch {
+    // ignorar errores de parse
+  }
+  return "";
+}
+
 export const FormContactHome = () => {
   const [status, setStatus] = useState<Status>("idle");
   const [wspUrl, setWspUrl] = useState("");
@@ -56,6 +66,7 @@ export const FormContactHome = () => {
           nombre: data.nombre,
           pagina: "/",
           cta: "Formulario de contacto",
+          gclid: getStoredGclid(),
         }),
       }).catch(() => {});
 

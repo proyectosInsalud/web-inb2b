@@ -10,6 +10,7 @@ import {
 import { usePathname } from "next/navigation";
 
 const STORAGE_KEY = "inb2b_phone_lead";
+const GCLID_STORAGE_KEY = "inb2b_gclid";
 
 interface PhoneLeadData {
   phone: string;
@@ -39,6 +40,7 @@ export function PhoneLeadProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [savedPhone, setSavedPhone] = useState<string | null>(null);
   const [savedNombre, setSavedNombre] = useState<string | null>(null);
+  const [gclid, setGclid] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [forceCapture, setForceCapture] = useState(false);
   const [pendingCTA, setPendingCTA] = useState<{
@@ -53,6 +55,27 @@ export function PhoneLeadProvider({ children }: { children: ReactNode }) {
         const data: PhoneLeadData = JSON.parse(raw);
         setSavedPhone(data.phone);
         setSavedNombre(data.nombre ?? null);
+      }
+    } catch {
+      // ignorar errores de parse
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const urlGclid = params.get("gclid");
+      if (urlGclid) {
+        localStorage.setItem(
+          GCLID_STORAGE_KEY,
+          JSON.stringify({ gclid: urlGclid, capturedAt: new Date().toISOString() })
+        );
+        setGclid(urlGclid);
+        return;
+      }
+      const raw = localStorage.getItem(GCLID_STORAGE_KEY);
+      if (raw) {
+        setGclid(JSON.parse(raw).gclid ?? null);
       }
     } catch {
       // ignorar errores de parse
@@ -74,6 +97,7 @@ export function PhoneLeadProvider({ children }: { children: ReactNode }) {
             nombre: savedNombre,
             pagina: pathname,
             cta: ctaLabel,
+            gclid: gclid ?? "",
           }),
         }).catch(() => {});
         window.dataLayer = window.dataLayer || [];
@@ -88,7 +112,7 @@ export function PhoneLeadProvider({ children }: { children: ReactNode }) {
       setPendingCTA({ href, label: ctaLabel });
       setIsModalOpen(true);
     },
-    [savedPhone, savedNombre, pathname]
+    [savedPhone, savedNombre, pathname, gclid]
   );
 
   const triggerCTAAlways = useCallback(
@@ -127,6 +151,7 @@ export function PhoneLeadProvider({ children }: { children: ReactNode }) {
           nombre,
           pagina: pathname,
           cta: pendingCTA?.label ?? "",
+          gclid: gclid ?? "",
         }),
       }).catch(() => {});
 
@@ -143,7 +168,7 @@ export function PhoneLeadProvider({ children }: { children: ReactNode }) {
         setPendingCTA(null);
       }
     },
-    [pathname, pendingCTA]
+    [pathname, pendingCTA, gclid]
   );
 
   return (
