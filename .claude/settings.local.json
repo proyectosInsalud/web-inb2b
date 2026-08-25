@@ -19,7 +19,17 @@
       "mcp__visualize__read_me",
       "mcp__visualize__show_widget",
       "mcp__claude-in-chrome__tabs_create_mcp",
-      "mcp__claude-in-chrome__read_page"
+      "mcp__claude-in-chrome__read_page",
+      "Bash(echo \"EXIT_CODE=$?\")",
+      "Bash(node \"C:\\\\Users\\\\user\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-user-Desktop-Fabricio-web-inb2b\\\\6f437de0-bf1f-4fea-b87c-4a93dd41d6fc\\\\scratchpad\\\\check-sheet.mjs\")",
+      "Bash(node scratch-check-sheet.mjs)",
+      "Bash(node scratch-cleanup-sheet.mjs)",
+      "Bash(node scratch-create-ads-sheet.mjs)",
+      "Bash(node scratch-debug-formula.mjs)",
+      "Bash(node scratch-fix-formula.mjs)",
+      "Bash(node scratch-final-check.mjs)",
+      "Bash(node scratch-cleanup-final.mjs)",
+      "Bash(git fetch *)"
     ]
   }
 }
