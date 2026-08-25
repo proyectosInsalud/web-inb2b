@@ -31,6 +31,16 @@ function getStoredGclid(): string {
   return "";
 }
 
+function getStoredCampana(): string {
+  try {
+    const raw = localStorage.getItem("inb2b_campana");
+    if (raw) return JSON.parse(raw).campana ?? "";
+  } catch {
+    // ignorar errores de parse
+  }
+  return "";
+}
+
 export const FormContactHome = () => {
   const [status, setStatus] = useState<Status>("idle");
   const [wspUrl, setWspUrl] = useState("");
@@ -67,6 +77,7 @@ export const FormContactHome = () => {
           pagina: "/",
           cta: "Formulario de contacto",
           gclid: getStoredGclid(),
+          campana: getStoredCampana(),
         }),
       }).catch(() => {});
 

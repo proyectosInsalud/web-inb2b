@@ -19,7 +19,7 @@ const borderStyle = {
 
 export async function POST(req: NextRequest) {
   try {
-    const { telefono, nombre, pagina, cta, gclid } = await req.json();
+    const { telefono, nombre, pagina, cta, gclid, campana } = await req.json();
 
     if (!telefono) {
       return NextResponse.json({ error: "Teléfono requerido" }, { status: 400 });
@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
               addSheet: {
                 properties: {
                   title: SHEET_NAME,
-                  gridProperties: { rowCount: 1000, columnCount: 6 },
+                  gridProperties: { rowCount: 1000, columnCount: 7 },
                 },
               },
             },
@@ -69,10 +69,10 @@ export async function POST(req: NextRequest) {
       // Escribir encabezados
       await sheets.spreadsheets.values.update({
         spreadsheetId,
-        range: `'${SHEET_NAME}'!A1:F1`,
+        range: `'${SHEET_NAME}'!A1:G1`,
         valueInputOption: "USER_ENTERED",
         requestBody: {
-          values: [["📅  Fecha y Hora", "👤  Nombre", "📞  Teléfono", "🌐  Página", "🎯  CTA Origen", "🔗  GCLID (Ads)"]],
+          values: [["📅  Fecha y Hora", "👤  Nombre", "📞  Teléfono", "🌐  Página", "🎯  CTA Origen", "🔗  GCLID (Ads)", "📣  Campaña"]],
         },
       });
 
@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
             // ── Fondo general de la hoja (azul oscuro base) ──────────────────
             {
               repeatCell: {
-                range: { sheetId, startRowIndex: 0, endRowIndex: 1000, startColumnIndex: 0, endColumnIndex: 6 },
+                range: { sheetId, startRowIndex: 0, endRowIndex: 1000, startColumnIndex: 0, endColumnIndex: 7 },
                 cell: {
                   userEnteredFormat: {
                     backgroundColor: COLOR_ROW_ODD,
@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
             // ── Encabezado ───────────────────────────────────────────────────
             {
               repeatCell: {
-                range: { sheetId, startRowIndex: 0, endRowIndex: 1, startColumnIndex: 0, endColumnIndex: 6 },
+                range: { sheetId, startRowIndex: 0, endRowIndex: 1, startColumnIndex: 0, endColumnIndex: 7 },
                 cell: {
                   userEnteredFormat: {
                     backgroundColor: COLOR_HEADER_BG,
@@ -180,22 +180,29 @@ export async function POST(req: NextRequest) {
                 fields: "pixelSize",
               },
             },
+            {
+              updateDimensionProperties: {
+                range: { sheetId, dimension: "COLUMNS", startIndex: 6, endIndex: 7 },
+                properties: { pixelSize: 200 },
+                fields: "pixelSize",
+              },
+            },
           ],
         },
       });
     } else {
       sheetId = existingSheet.properties?.sheetId ?? 1;
 
-      // Backfill: si la hoja ya existía antes de agregar la columna GCLID, expandir el grid y completar el encabezado
+      // Backfill: si la hoja ya existía antes de agregar columnas nuevas, expandir el grid y completar encabezados
       const currentColumnCount = existingSheet.properties?.gridProperties?.columnCount ?? 5;
-      if (currentColumnCount < 6) {
+      if (currentColumnCount < 7) {
         await sheets.spreadsheets.batchUpdate({
           spreadsheetId,
           requestBody: {
             requests: [
               {
                 updateSheetProperties: {
-                  properties: { sheetId, gridProperties: { columnCount: 6 } },
+                  properties: { sheetId, gridProperties: { columnCount: 7 } },
                   fields: "gridProperties.columnCount",
                 },
               },
@@ -206,14 +213,23 @@ export async function POST(req: NextRequest) {
 
       const headerRes = await sheets.spreadsheets.values.get({
         spreadsheetId,
-        range: `'${SHEET_NAME}'!F1`,
+        range: `'${SHEET_NAME}'!F1:G1`,
       });
-      if (!headerRes.data.values?.[0]?.[0]) {
+      const headerRow = headerRes.data.values?.[0] ?? [];
+      if (!headerRow[0]) {
         await sheets.spreadsheets.values.update({
           spreadsheetId,
           range: `'${SHEET_NAME}'!F1`,
           valueInputOption: "USER_ENTERED",
           requestBody: { values: [["🔗  GCLID (Ads)"]] },
+        });
+      }
+      if (!headerRow[1]) {
+        await sheets.spreadsheets.values.update({
+          spreadsheetId,
+          range: `'${SHEET_NAME}'!G1`,
+          valueInputOption: "USER_ENTERED",
+          requestBody: { values: [["📣  Campaña"]] },
         });
       }
     }
@@ -232,9 +248,9 @@ export async function POST(req: NextRequest) {
     // Escribir la nueva fila
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: `'${SHEET_NAME}'!A:F`,
+      range: `'${SHEET_NAME}'!A:G`,
       valueInputOption: "RAW",
-      requestBody: { values: [[date, nombre ?? "", telefono, pagina ?? "", cta ?? "", gclid ?? ""]] },
+      requestBody: { values: [[date, nombre ?? "", telefono, pagina ?? "", cta ?? "", gclid ?? "", campana ?? ""]] },
     });
 
     // Formatear la fila recién añadida
@@ -249,7 +265,7 @@ export async function POST(req: NextRequest) {
                 startRowIndex: newRowIndex,
                 endRowIndex: newRowIndex + 1,
                 startColumnIndex: 0,
-                endColumnIndex: 6,
+                endColumnIndex: 7,
               },
               cell: {
                 userEnteredFormat: {
