@@ -4,7 +4,7 @@ import { useState } from "react";
 import { HeroNav } from "@/components/pages/home/HeroNav";
 import { usePhoneLead } from "@/context/PhoneLeadContext";
 
-const WSP_IPRESS = "https://wa.me/51943366635?text=%C2%A1Hola!%20Vi%20su%20p%C3%A1gina%20IPRESS.%20Deseo%20m%C3%A1s%20informaci%C3%B3n%20sobre%20categorizaci%C3%B3n%20de%20mi%20establecimiento";
+const WSP_IPRESS = "https://wa.me/51997231931?text=%C2%A1Hola!%20Vi%20su%20p%C3%A1gina%20IPRESS.%20Deseo%20m%C3%A1s%20informaci%C3%B3n%20sobre%20categorizaci%C3%B3n%20de%20mi%20establecimiento";
 
 const services = [
   {
