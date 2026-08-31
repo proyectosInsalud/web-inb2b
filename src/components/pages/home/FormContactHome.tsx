@@ -17,7 +17,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Loader2, CheckCircle2, XCircle, X } from "lucide-react";
 
-const WHATSAPP_NUMBER = "51997231931";
+const WHATSAPP_NUMBER = "51943366635";
 
 type Status = "idle" | "loading" | "success" | "error";
 

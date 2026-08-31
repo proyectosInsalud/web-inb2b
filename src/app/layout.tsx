@@ -173,7 +173,7 @@ export default async function RootLayout({
           <AOSInit />
           <Popup popup={popup} />
           <WhatsAppButton
-            phoneNumber="51997231931"
+            phoneNumber="51943366635"
             message="¡Hola! Vi su página web. Deseo más informacion sobre cómo categorizar mi negocio"
           />
           <PhoneLeadModal />

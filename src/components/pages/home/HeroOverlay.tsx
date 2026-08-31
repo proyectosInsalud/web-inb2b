@@ -3,7 +3,7 @@ import { HeroNav } from "./HeroNav";
 import { usePhoneLead } from "@/context/PhoneLeadContext";
 
 const WSP_HREF =
-  "https://wa.me/51997231931?text=%C2%A1Hola!%20Vi%20su%20p%C3%A1gina%20web.%20Deseo%20m%C3%A1s%20informacion%20sobre%20c%C3%B3mo%20categorizar%20mi%20negocio";
+  "https://wa.me/51943366635?text=%C2%A1Hola!%20Vi%20su%20p%C3%A1gina%20web.%20Deseo%20m%C3%A1s%20informacion%20sobre%20c%C3%B3mo%20categorizar%20mi%20negocio";
 
 export const HeroOverlay = () => {
   const { triggerCTA } = usePhoneLead();
