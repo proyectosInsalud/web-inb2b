@@ -34,6 +34,12 @@ export async function POST(req: NextRequest) {
       */
     }
 
+    // El banner del blog vive en Sanity y se pinta en /blog
+    if (body._type === "banner") {
+      revalidateTag("blog-list", "max");
+      revalidatePath("/blog", "page");
+    }
+
     return NextResponse.json({
       revalidated: true,
       now: Date.now(),
