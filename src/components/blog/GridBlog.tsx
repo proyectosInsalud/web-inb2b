@@ -106,7 +106,7 @@ function BlogCard({ post }: { post: BlogPost }) {
 function BannerCard({ banner }: { banner: BlogBanner }) {
   if (!banner?.imageUrl) return null;
 
-  return (
+  const card = (
     <div className="rounded-2xl overflow-hidden border border-white/10 h-full min-h-0">
       <div className="relative h-full w-full min-h-[300px] md:min-h-0">
         <Image
@@ -118,6 +118,19 @@ function BannerCard({ banner }: { banner: BlogBanner }) {
         />
       </div>
     </div>
+  );
+
+  if (!banner.link) return card;
+
+  const isExternal = /^https?:\/\//i.test(banner.link);
+  return (
+    <a
+      href={banner.link}
+      className="block h-full"
+      {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+    >
+      {card}
+    </a>
   );
 }
 

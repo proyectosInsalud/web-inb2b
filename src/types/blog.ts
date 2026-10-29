@@ -48,6 +48,7 @@ export interface BlogPost {
 export interface BlogBanner {
   imageUrl: string;
   alt: string;
+  link?: string;
   active: boolean;
 }
 

@@ -93,6 +93,7 @@ export const ACTIVE_BANNER = groq`
   *[_type == "banner" && active == true] | order(_updatedAt desc) [0] {
     "imageUrl": image.asset->url,
     alt,
+    link,
     active
   }
 `;
@@ -147,6 +148,7 @@ export const BLOG_PAGE_DATA = groq`
     "banner": *[_type == "banner" && active == true] | order(_updatedAt desc) [0] {
       "imageUrl": image.asset->url,
       alt,
+      link,
       active
     }
   }
