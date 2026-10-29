@@ -132,6 +132,20 @@ export function PhoneLeadProvider({ children }: { children: ReactNode }) {
     window.open(href, "_blank", "noopener,noreferrer");
   };
 
+  // Sin formulario: abre el enlace directo y registra el clic
+  const openDirect = useCallback(
+    (href: string, ctaLabel: string) => {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "whatsappClick",
+        cta: ctaLabel,
+        pagina: pathname,
+      });
+      openURL(href);
+    },
+    [pathname]
+  );
+
   const triggerCTA = useCallback(
     (href: string, ctaLabel: string) => {
       if (savedPhone && savedNombre) {
@@ -157,25 +171,16 @@ export function PhoneLeadProvider({ children }: { children: ReactNode }) {
         openURL(buildPersonalizedUrl(href, savedNombre, savedPhone));
         return;
       }
-      setPendingCTA({ href, label: ctaLabel });
-      setIsModalOpen(true);
+      openDirect(href, ctaLabel);
     },
-    [savedPhone, savedNombre, pathname, gclid, campana, gadCampaignId]
+    [savedPhone, savedNombre, pathname, gclid, campana, gadCampaignId, openDirect]
   );
 
   const triggerCTAAlways = useCallback(
     (href: string, ctaLabel: string) => {
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        event: "leadModalOpened",
-        cta: ctaLabel,
-        pagina: pathname,
-      });
-      setPendingCTA({ href, label: ctaLabel });
-      setForceCapture(true);
-      setIsModalOpen(true);
+      openDirect(href, ctaLabel);
     },
-    [pathname]
+    [openDirect]
   );
 
   const closeModal = useCallback(() => {
